@@ -62,7 +62,6 @@ new class {
 				const response = request.response;
 				const newelm = response.body.firstElementChild;
 				document.body.append(newelm);
-				$.parser.parse(newelm);
 				$(newelm).attr('page-href',page);
 				$(newelm).window({
 					fit: true,
@@ -96,6 +95,7 @@ new class {
 						}
 					}
 				});
+				$.parser.parse(newelm);
 			}
 		});
 		request.open('GET', href);

@@ -18,6 +18,7 @@ self.addEventListener('fetch',function(event){
 		//本域
 		switch(true){
 			case /themes\//.test(url.pathname):
+			case /pages\/.+\.webp$/.test(url.pathname):
 				return event.respondWith(BaseResponse(request, 'qq14-themes'));
 			break;
 		}
