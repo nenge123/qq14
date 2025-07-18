@@ -2,3 +2,12 @@
 	font-size: 1.5rem;
 	font-weight: bold;
 }
+td[field="path"],td[field="event"]{
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+}
+.panel-body.accordion-body img{max-width: 100%;margin: 0px auto;}
+.easyui-tree.m-2 li{
+	margin-top: .25rem;
+	margin-bottom: .25rem;
+}
