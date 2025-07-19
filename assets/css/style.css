@@ -11,3 +11,8 @@ td[field="path"],td[field="event"]{
 	margin-top: .25rem;
 	margin-bottom: .25rem;
 }
+img.icons{
+	display: inline-block;
+	max-width: 48px !important;
+	max-height: 48px !important;
+}

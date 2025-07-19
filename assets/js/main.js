@@ -25,7 +25,7 @@ new class {
 				if (elm instanceof HTMLElement) {
 					elm.click();
 				} else {
-					N.getPage(page);
+					N.getWin(page);
 				}
 			}
 		})
@@ -48,19 +48,28 @@ new class {
 					$(newelm).window('open');
 					this.addEventListener('click',()=>$(newelm).window('open'));
 				}else{
-					N.getPage(page, this);
+					N.getWin(page, this);
 				}
 			}, { once: true });
 		});
 	}
-	getPage(page, elm) {
+	getWin(page, elm) {
 		const N = this;
 		const request = new XMLHttpRequest;
 		const href = new URL('pages/' + page, location);
 		request.addEventListener('readystatechange', function () {
 			if (request.readyState === request.DONE) {
 				const response = request.response;
+				if(request.status!=200){
+					return alert('页面不存在!');
+				}
+				/**
+				 * @type {HTMLElement}
+				 */
 				const newelm = response.body.firstElementChild;
+				if(!newelm.classList.contains('easyui-window')){
+					return alert('未能获取合法页面窗口!');
+				}
 				document.body.append(newelm);
 				$(newelm).attr('page-href',page);
 				$(newelm).window({
