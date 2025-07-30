@@ -28,7 +28,8 @@ new class {
 					N.getWin(page);
 				}
 			}
-		})
+		});
+
 	}
 	/**
 	 * 
@@ -51,6 +52,12 @@ new class {
 					N.getWin(page, this);
 				}
 			}, { once: true });
+		});
+		Array.from(dom.querySelectorAll('[data-app]'), async elm => {
+			const js = elm.getAttribute('data-app');
+			elm.removeAttribute('data-app');
+			const {default:Module} = await import(js);
+			new Module(elm,dom);
 		});
 	}
 	getWin(page, elm) {
@@ -96,15 +103,18 @@ new class {
 								localStorage.setItem('base-page', elm.getAttribute('data-page'));
 							}
 						}
+						$(newelm).trigger('window.open');
 					},
 					onClose(){
 						const page = localStorage.getItem('base-page');
 						if(page&&page==$(newelm).attr('page-href')){
 							localStorage.removeItem('base-page');
 						}
+						$(newelm).trigger('window.close');
 					}
 				});
 				$.parser.parse(newelm);
+				N.parse(newelm);
 			}
 		});
 		request.open('GET', href);

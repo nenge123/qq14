@@ -16,3 +16,10 @@ img.icons{
 	max-width: 48px !important;
 	max-height: 48px !important;
 }
+.flex{
+	display: flex;
+}
+.flex.center{
+	align-items: center;
+	justify-content: space-between;
+}
