@@ -5,6 +5,7 @@ new class {
 		self.navigator.serviceWorker && self.navigator.serviceWorker.register('sw.js');
 		$(function () {
 			N.parse();
+			/*
 			$('#layout-main').window({
 				title: '引导',
 				fit: true,
@@ -19,6 +20,7 @@ new class {
 				minimizable: false,
 				modal: false,
 			});
+			*/
 			const page = localStorage.getItem('base-page');
 			if (page) {
 				const elm = document.querySelector('[data-page="' + page + '"]');
@@ -74,6 +76,10 @@ new class {
 				 * @type {HTMLElement}
 				 */
 				const newelm = response.body.firstElementChild;
+				$(newelm).attr('page-href',page);
+				if(newelm.classList.contains('modal')){
+					return  N.showModal(newelm,elm);
+				}
 				if(!newelm.classList.contains('easyui-window')){
 					return alert('未能获取合法页面窗口!');
 				}
@@ -120,5 +126,21 @@ new class {
 		request.open('GET', href);
 		request.responseType = 'document';
 		request.send(null);
+	}
+	showModal(newelm,elm){
+		document.body.appendChild(newelm);
+		localStorage.setItem('base-page', elm.getAttribute('data-page'));
+		jQuery(newelm).modal('show').on('hide.bs.modal', function () {
+			const page = localStorage.getItem('base-page');
+			if(page&&page==$(newelm).attr('page-href')){
+				localStorage.removeItem('base-page');
+			}
+			$(newelm).trigger('window.close');
+		});
+		elm.addEventListener('click', function () {
+			jQuery(newelm).modal('show');
+		});
+		this.parse(newelm);
+
 	}
 }

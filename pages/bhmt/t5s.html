@@ -1,59 +1,318 @@
-<div class="easyui-window" title="【FF14手游】T5S攻略 巴哈姆特零式大迷宫 邂逅之章5——T5S双塔尼亚" data-options="iconCls:'icon-tip'" style="padding: 10px;">
-	<p><a href="https://www.bilibili.com/video/BV1z23fzLEBR/?spm_id_from=333.1387.homepage.video_card.click&vd_source=469812cdc9cdf2cc5d1df1de7e91dc4d" target="_blank">B站原视频地址</a></p>
-	<p>文案/配音/制作：顾跑跑 </p>
-	<p>参演/协力：子言姐姐 菓子君 素素 青瓜 Waffle Tiger 狗蛋 </p>
-	<p>特别鸣谢：狗蛋 Tiger </p>
-	
-	<h3>BOSS机制</h3>
-	
-	<div class="easyui-accordion big-text" data-options="selected:false" style="width:80%;max-width:800px;margin: 10px auto;">
-		<div title="火焰分摊">
-			<img src="/pages//bhmt/t5s6.webp" style="max-width: 100%;">
-			<br>治疗被点名,四名队友分摊后会被增加火焰易伤BUFF.
-			<hr>小蛇后阶段,坦克如果不参与分摊后,火焰流就不会出现在坦克身上,如果出现在液态地狱的治疗身上,会瞬间爆炸团灭!
-		</div>
-		<div title="火焰流">
-			<img src="/pages//bhmt/t5s5.webp" style="max-width: 100%;">
-			<br>被标记的人去BOSS背后脚下,
-			<br>初期阶段如果没打掉火焰流,基本可以重开.
-			<hr>旋风阶段,坦克参与分摊后,MT ST必然火焰点名,要等BOSS的追踪黑球出现再去BOSS脚下!
-		</div>
-		<div title="俯冲">
-			<img src="/pages//bhmt/t5s2.webp" style="max-width: 100%;">
-			<br>奇数去③,偶数去④.要按照顺序来.如果你忘了自己点数,那就去A点(不要在中间发呆!!)
-			<br><img src="/pages//bhmt/t5s1.webp" style="max-width: 100%;">
-
-		</div>
-		<div title="旋风">
-			<img src="/pages//bhmt/t5s3.webp" style="max-width: 100%;">
-			<br>第一次的旋风距离比较远,以此需要协调站位,注意不要踩到绿圈,边缘也不行.紫圈范围碰到绿圈即可.
-			<img src="/pages//bhmt/t5s4.webp" style="max-width: 100%;">
-			<br>第二次旋风比较紧凑,可以让4个DPS去炸掉,治疗稍微往左右两个拘束器后面分别靠拢,其他人要注意BOSS脚下出现的追踪黑球.
-		</div>
-		<div title="死刑(坦克)">
-			小蛇后的阶段,死刑是非常频繁的,因此每次死刑换坦.
-		</div>
-		<div title="追踪黑球与液态地狱(治疗)">
-			小蛇后的阶段,分摊火焰伤害后,其他人不要站到通道上.
-			<br><img src="/pages//bhmt/t5s7.webp" style="max-width: 100%;">
-			<br><img src="/pages//bhmt/t5s8.webp" style="max-width: 100%;">
-			<br>黑球点名站到拘束器上
-			<br><img src="/pages//bhmt/t5s9.webp" style="max-width: 100%;">
-			<br>没被黑球点名,BOSS读条液态地狱时,治疗到地图左右顺逆时针跑.
-			<br><img src="/pages//bhmt/t5s10.webp" style="max-width: 100%;">
-
-		</div>
-		<div title="拘束器">
-			站在上面会大幅降低伤害和治疗量,没事踩进去.
+<div class="modal fade" aria-hidden="true">
+	<div class="modal-dialog modal-fullscreen">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">【FF14手游】T5S攻略 巴哈姆特零式大迷宫 邂逅之章5——T5S双塔尼亚</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" style="padding: .25rem;">
+				<p><a href="https://www.bilibili.com/video/BV1z23fzLEBR/?spm_id_from=333.1387.homepage.video_card.click&vd_source=469812cdc9cdf2cc5d1df1de7e91dc4d" target="_blank">B站原视频地址</a></p>
+				<p>文案/配音/制作：顾跑跑 </p>
+				<p>参演/协力：子言姐姐 菓子君 素素 青瓜 Waffle Tiger 狗蛋 </p>
+				<p>特别鸣谢：狗蛋 Tiger </p>
+				<h3>BOSS机制</h3>
+				
+				
+				<div class="accordion" id="accordionExample">
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc1" aria-expanded="false" aria-controls="cc1">火焰分摊</button>
+						</h2>
+						<div id="cc1" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								<img src="/pages//bhmt/t5s6.webp" style="max-width: 100%;">
+								<br>治疗被点名,四名队友分摊后会被增加火焰易伤BUFF.
+								<hr>小蛇后阶段,坦克如果不参与分摊后,火焰流就不会出现在坦克身上,如果出现在液态地狱的治疗身上,会瞬间爆炸团灭!
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc2" aria-expanded="false" aria-controls="cc2">火焰流</button>
+						</h2>
+						<div id="cc2" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								<img src="/pages//bhmt/t5s5.webp" style="max-width: 100%;">
+								<br>被标记的人去BOSS背后脚下, <br>初期阶段如果没打掉火焰流,基本可以重开.
+								<hr>旋风阶段,坦克参与分摊后,MT ST必然火焰点名,要等BOSS的追踪黑球出现再去BOSS脚下!
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc3" aria-expanded="false" aria-controls="cc3">俯冲</button>
+						</h2>
+						<div id="cc3" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								
+						<img src="/pages//bhmt/t5s2.webp" style="max-width: 100%;">
+						<br>奇数去③,偶数去④.要按照顺序来.如果你忘了自己点数,那就去A点(不要在中间发呆!!) <br><img src="/pages//bhmt/t5s1.webp" style="max-width: 100%;">
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc4" aria-expanded="false" aria-controls="cc4">旋风</button>
+						</h2>
+						<div id="cc4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								<img src="/pages//bhmt/t5s3.webp" style="max-width: 100%;">
+								<br>第一次的旋风距离比较远,以此需要协调站位,注意不要踩到绿圈,边缘也不行.紫圈范围碰到绿圈即可. <img src="/pages//bhmt/t5s4.webp" style="max-width: 100%;">
+								<br>第二次旋风比较紧凑,可以让4个DPS去炸掉,治疗稍微往左右两个拘束器后面分别靠拢,其他人要注意BOSS脚下出现的追踪黑球.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc4" aria-expanded="false" aria-controls="cc4">死刑(坦克)</button>
+						</h2>
+						<div id="cc4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								小蛇后的阶段,死刑是非常频繁的,因此每次死刑换坦. 
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc5" aria-expanded="false" aria-controls="cc5">追踪黑球与液态地狱(治疗)</button>
+						</h2>
+						<div id="cc5" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								旋风之后阶段,分摊火焰伤害后,其他人不要站到通道上. <br><img src="/pages//bhmt/t5s7.webp" style="max-width: 100%;">
+								<br><img src="/pages//bhmt/t5s8.webp" style="max-width: 100%;">
+								<br>黑球点名站到拘束器上 <br><img src="/pages//bhmt/t5s9.webp" style="max-width: 100%;">
+								<br>没被黑球点名,BOSS读条液态地狱时,治疗到地图左右顺逆时针跑. <br><img src="/pages//bhmt/t5s10.webp" style="max-width: 100%;">
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<h3>BOSS技能循环</h3>
+				<div class="table-responsive">
+					<table class="table table-striped" style="font-size: .875rem;">
+						<thead>
+							<tr>
+								<th scope="col">技能</th>
+								<th scope="col">说明</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-keep">双塔尼亚</td>
+								<td>MT拉至①号位</td>
+							</tr>
+							<tr>
+								<td class="text-keep">美拉西迪亚祸龙</td>
+								<td>ST拉至①号位附近,方便群攻打到双塔尼亚</td>
+							</tr>
+							<tr>
+								<td class="text-keep">垂直下落</td>
+								<td>双塔尼亚前方大范围横扫</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害</td>
+							</tr>
+							<tr>
+								<td class="text-keep">随机点名吐火圈</td>
+								<td>美拉西迪亚祸龙释放</td>
+							</tr>
+							<tr>
+								<td class="text-keep">消灭美拉西迪亚祸龙后</td>
+								<td>MT调整方向,朝向②点,队伍在BOSS屁股后方,分成两组站立</td>
+							</tr>
+							<tr>
+								<td class="text-keep">掉落第一个拘束器</td>
+								<td>血量低于83%,MT需要火焰流结束后把双塔尼亚尽快拉到②点</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火球分摊</td>
+								<td>需要4人分摊</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰流点名</td>
+								<td>深黑绿色黑洞点名,被点名的人走到BOSS背后脚下</td>
+							</tr>
+							<tr>
+								<td class="text-keep">拉至②号位</td>
+								<td>双塔尼亚</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火球分摊</td>
+								<td>需要4人分摊</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰流点名</td>
+								<td>深黑绿色黑洞点名,被点名的人走到BOSS背后脚下</td>
+							</tr>
+							<tr>
+								<td class="text-keep">掉落第二个拘束器</td>
+								<td>血量低于64%,此时人群略为散开</td>
+							</tr>
+							<tr>
+								<td class="text-keep">俯冲点名</td>
+								<td>头顶的白色小球是俯冲顺序,以两个拘束齐为参考.<br>1个白球的先抵达拘束器左边的③号位.<br>2个白球的去拘束器右边的④号位.<br>其他人根据自身球数单双,默数1357/2468顺序分别前往③④号位置引导俯冲.<br><b style="color:red">回来的时候开冲刺.</b></td>
+							</tr>
+							<tr>
+								<td class="text-keep">以太失控</td>
+								<td>俯冲结束点名的人前往地图的拘束,每个拘束器只能容纳4人,请按照队伍分组前往.<br>超过四人,拘束器消失,五人被以太失控打死</td>
+							</tr>
+							<tr>
+								<td class="text-keep">「许癸厄亚」小蛇</td>
+								<td>血量低,击杀会对周围产生1层易伤,因此ST拉小蛇</td>
+							</tr>
+							<tr>
+								<td class="text-keep">「阿斯克勒庇俄斯」大蛇</td>
+								<td>血量很高,<b style="color:red">可以利用小蛇的死亡易伤对其施加</b>,加速击杀,因此MT拉大蛇</td>
+							</tr>
+							<tr>
+								<td class="text-keep">小蛇即将死亡</td>
+								<td><b style="color:red">近战MT ST适当远离</b></td>
+							</tr>
+							<tr>
+								<td class="text-keep">大蛇即将死亡</td>
+								<td>远离MT,MT站到靠近A点处</td>
+							</tr>
+							<tr>
+								<td class="text-keep">垂直下落</td>
+								<td>双塔尼亚前方大范围横扫</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火球分摊</td>
+								<td>需要4人分摊</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害,现在开始死刑后换坦</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰流点名</td>
+								<td>深黑绿色黑洞点名,被点名的人走到BOSS背后脚下</td>
+							</tr>
+							<tr>
+								<td class="text-keep">旋风</td>
+								<td>BOSS四周出现圆形范围预警,变成绿色潭水<br><b style="color:red">不小心踩上去团灭,黑色边缘也不行</b></td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰爆破</td>
+								<td>每2名玩家身上出现范围标记圈,两个圈覆盖一个<b style="color:red">旋风</b>区域,标记消失时炸掉旋风</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害,现在开始死刑后换坦</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火球分摊</td>
+								<td>需要4人分摊</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰流点名</td>
+								<td>深黑绿色黑洞点名,被点名的人走到BOSS背后脚下</td>
+							</tr>
+							<tr>
+								<td class="text-keep">追终黑球</td>
+								<td>注意不要站到拘束器和BOSS之间的直线通道,<br>BOSS随机点名一个治疗(三个球的标记),需要站到拘束器上</td>
+							</tr>
+							<tr>
+								<td class="text-keep">液态地狱</td>
+								<td>没被点名治疗会被BOSS吐5次火圈,因此没被点名要迅速离开人群.</td>
+							</tr>
+							<tr>
+								<td class="text-keep">垂直下落</td>
+								<td>双塔尼亚前方大范围横扫</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害,现在开始死刑后换坦</td>
+							</tr>
+							<tr>
+								<td class="text-keep">追终黑球</td>
+								<td>注意不要站到拘束器和BOSS之间的直线通道,<br>BOSS随机点名一个治疗(三个球的标记),需要站到拘束器上</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害,现在开始死刑后换坦</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火球分摊</td>
+								<td>需要4人分摊</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰流点名</td>
+								<td>深黑绿色黑洞点名,被点名的人走到BOSS背后脚下,火焰流遇到液态火圈会瞬间爆炸</td>
+							</tr>
+							<tr>
+								<td class="text-keep">追终黑球</td>
+								<td>注意不要站到拘束器和BOSS之间的直线通道,<br>BOSS随机点名一个治疗(三个球的标记),点名的治疗需要站到拘束器上</td>
+							</tr>
+							<tr>
+								<td class="text-keep">液态地狱</td>
+								<td>没被点名治疗会被BOSS吐5次火圈,因此没被点名要迅速离开人群.</td>
+							</tr>
+							<tr>
+								<td class="text-keep">垂直下落</td>
+								<td>双塔尼亚前方大范围横扫</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害,现在开始死刑后换坦</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火球分摊</td>
+								<td>需要4人分摊.<b style="color:red">坦克必须参与各自分摊,否则火焰流不会出现在坦克身上</b></td>
+							</tr>
+							<tr>
+								<td class="text-keep">旋风</td>
+								<td>BOSS四周出现圆形范围预警,变成绿色潭水<br><b style="color:red">不小心踩上去团灭,黑色边缘也不行</b></td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰爆破</td>
+								<td>此时旋风距离很近,四个输出可以很好站两个<b style="color:red">旋风</b>中间炸掉.<br>距离拘束器比较近的人,注意治疗标记的的追终黑球.<br>输出此刻不要太多移动,准备打掉坦克的火焰流.</td>
+							</tr>
+							<tr>
+								<td class="text-keep">追终黑球</td>
+								<td><b style="color:red">注意不要站到拘束器和BOSS之间的直线通道.<b><br>BOSS随机点名一个治疗(三个球的标记),需要站到拘束器上</td>
+							</tr>
+							<tr>
+								<td class="text-keep">液态地狱</td>
+								<td>没被点名治疗会被BOSS吐5次火圈,因此没被点名要迅速离开人群.</td>
+							</tr>
+							<tr>
+								<td class="text-keep">火焰流点名</td>
+								<td>坦克参与前面分摊的时候,必定被点名,一定要在追终黑球出现后到BOSS脚下.<br>火焰流遇到液态火圈会瞬间爆炸团灭</td>
+							</tr>
+							<tr>
+								<td class="text-keep">垂直下落</td>
+								<td>双塔尼亚前方大范围横扫</td>
+							</tr>
+							<tr>
+								<td class="text-keep">死刑</td>
+								<td>双塔尼亚造成高额单体伤害,现在开始死刑后换坦</td>
+							</tr>
+							<tr>
+								<td class="text-keep">追终黑球</td>
+								<td>注意不要站到拘束器和BOSS之间的直线通道,<br>BOSS随机点名一个治疗(三个球的标记),需要站到拘束器上</td>
+							</tr>
+							<tr>
+								<td class="text-keep">液态地狱</td>
+								<td>没被点名治疗会被BOSS吐5次火圈,因此没被点名要迅速离开人群.</td>
+							</tr>
+							<tr>
+								<td class="text-keep">循环</td>
+								<td>直至8分钟后</td>
+							</tr>
+							<tr>
+								<td class="text-keep">以太失控</td>
+								<td>强制团灭</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<p style="flex-grow: 1;"><a href="https://www.bilibili.com/video/BV1gV3uzREEF/" target="_blank">B站原视频地址</a></p>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+			</div>
 		</div>
 	</div>
-	<h3>BOSS技能循环</h3>
-	<table class="easyui-datagrid" data-options="nowrap:true,border:false,fitColumns:false,singleSelect:true,url:'/pages/bhmt/t5s-skill-2.json',method:'GET'">
-		<thead>
-			<tr>
-				<th data-options="field:'path',width:180,fixed:true,resizable:false">技能</th>
-				<th data-options="field:'event'">说明</th>
-			</tr>
-		</thead>
-	</table>
 </div>

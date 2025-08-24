@@ -23,3 +23,7 @@ img.icons{
 	align-items: center;
 	justify-content: space-between;
 }
+.text-keep{
+    word-break: keep-all;
+    white-space: nowrap;
+}
