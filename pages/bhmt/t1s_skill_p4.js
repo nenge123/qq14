@@ -9,6 +9,7 @@ export default class t1s{
 		const img =  await createImageBitmap(await (await fetch('/pages/bhmt/t1s_s_1.webp')).blob(),{resizeHeight:180});
 		const fh =  await createImageBitmap(await (await fetch('/images/job/fh.webp')).blob());
 		const boss =  await createImageBitmap(await (await fetch('/images/boss/1.webp')).blob());
+		this.dps  =  await createImageBitmap(await (await fetch('/images/job/d.webp')).blob());
 		this.canvas.width = img.width;
 		this.canvas.height = img.height*2;
 		this.ctx = this.canvas.getContext('2d');
@@ -32,11 +33,13 @@ export default class t1s{
 		}
 		ctx.drawImage(boss,120,35);
 		ctx.drawImage(boss,120,35+img.height);
-		if(this.time<5){
+		if(this.time<10){
+			ctx.fillStyle = "red";
 			ctx.strokeStyle = "red";
 			ctx.beginPath();
 			ctx.roundRect(140,18, 28, 28, [25]);
 			ctx.fill();
+			ctx.fillStyle = "red";
 			ctx.strokeStyle = "red";
 			ctx.beginPath();
 			ctx.roundRect(140,18+img.height, 28, 28, [25]);
@@ -50,7 +53,7 @@ export default class t1s{
 			ctx.fillText('开始',200,200);
 		}
 		ctx.font = "bold 14px serif";
-		if(this.time<20&&this.time>4 || this.time>30&&this.time<40){
+		if(this.time>30&&this.time<40){
 			// 半径为零的圆角矩形（指定为数字）
 			ctx.strokeStyle = "rgba(255,0,0,0.5)";
 			ctx.fillStyle  = "rgba(255,0,0,0.5)";
@@ -67,8 +70,8 @@ export default class t1s{
 			ctx.fillStyle = "red";
 			ctx.fillText('人群',100,50)
 			ctx.fillText('人群',120,75+img.height);
-			if(this.time<20&&this.time>5){
-				let per = (this.time-5)/15;
+			if(this.time<20&&this.time>10){
+				let per = (this.time-10)/10;
 				if(per>1)per=1;
 				ctx.drawImage(fh,142-35*per,25+10*per);
 				ctx.drawImage(fh,142-20*per,img.height+22+38*per);
@@ -91,6 +94,13 @@ export default class t1s{
 				ctx.drawImage(fh,127+(142-127)*per2,50-(50-22)*per2);
 				ctx.drawImage(fh,102+(142-102)*per2,img.height+35-(35-22)*per2);
 			}
+		}
+		if(this.time>40){
+			ctx.drawImage(this.dps,90,30);
+			ctx.drawImage(this.dps,122,img.height+80);
+			ctx.fillStyle = "red";
+			ctx.fillText('喂蛇人(71+)',90,30);
+			ctx.fillText('喂蛇人(71+)',122,img.height+80);
 		}
 		this.time+=1;
 		if(this.time>80){
