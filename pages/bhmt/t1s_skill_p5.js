@@ -24,103 +24,180 @@ export default class t1s {
 		if (this.time < 20) {
 			let p = this.time / 20;
 			ctx.globalAlpha = 1 - p;
-			ctx.drawImage(this.boss, 115, 210);
+			this.setBoss(this.boos_start);
 			ctx.globalAlpha = 1;
 			ctx.fillStyle = "yellow";
 			ctx.font = "bold";
 			ctx.fillText('HP 68%', 115, 200);
 			ctx.fillStyle = "red";
-			ctx.fillText('人群', 120, 260);
+			ctx.fillText('人群',...this.player_pos);
 			ctx.drawImage(this.tank, 150, 205);
 		} else if (this.time >= 20 && this.time < 80) {
-			ctx.drawImage(this.boss, 130, 160);
+			this.setBoss(this.boos_center_top);
 			if (this.time < 50) {
 				ctx.fillStyle = "red";
-				ctx.fillText('人群', 120, 200);
+				ctx.fillText('人群',...this.player_pos);
 			}
 			if (this.time > 30) {
 				let p = (this.time - 30) / 50;
 				if (p > 1) p = 1;
-				//治疗
-				this.drawJob('heal', '治疗3', 120 - 60 * p, 200 - 20 * p);
-				this.drawJob('heal', '治疗4', 120 + 100 * p, 200 - 40 * p);
-				//远程
-				this.drawJob('dps', '远程7', 120-60*p,200-40*p);
-				this.drawJob('dps', '远程8', 120+100*p, 200-20*p);
-				//近战
-				this.drawJob('dps', '近战5', 120-10*p,200-10*p,'yellow');
-				this.drawJob('dps', '近战6', 120+30*p, 200-60*p,'yellow');
-				//坦克
-				this.drawJob('tank', '坦克1', 120-30*p,200-30*p,'yellow');
-				this.drawJob('tank', '坦克2', 120+40*p, 200-40*p,'yellow');
+				//1组
+				this.moveJob(this.player_pos,this.player_t1_1,p,this.tank,'坦1');
+				this.moveJob(this.player_pos,this.player_h3_1,p,this.heal,'疗3');
+				this.moveJob(this.player_pos,this.player_d5_1,p,this.dps,'近5');
+				this.moveJob(this.player_pos,this.player_d7_1,p,this.dps,'远7');
+				//2组
+				this.moveJob(this.player_pos,this.player_t2_1,p,this.tank,'坦2');
+				this.moveJob(this.player_pos,this.player_h4_1,p,this.heal,'疗4');
+				this.moveJob(this.player_pos,this.player_d6_1,p,this.dps,'近6');
+				this.moveJob(this.player_pos,this.player_d8_1,p,this.dps,'远8');
 			}
-		} else if (this.time >= 80&&this.time<100) {
-			if(this.time>=90){
-				let p = (this.time - 90) / 20;
+		} else if (this.time >= 80 && this.time < 100) {
+			if (this.time >= 90) {
+				let p = (this.time - 90) / 25;
 				if (p > 1) p = 1;
 				ctx.globalAlpha = 1 - p;
-				ctx.drawImage(this.boss, 130, 160);
+				this.setBoss(this.boos_center_top);
 				ctx.globalAlpha = 1;
 
-			}else{
-				ctx.drawImage(this.boss, 130, 160);
+			} else {
+				this.setBoss(this.boos_center_top);
 			}
-			//治疗
-			this.drawJob('heal', '治疗3', 60, 180);
-			this.drawJob('heal', '治疗4', 220, 160);
-			//远程
-			this.drawJob('dps', '远程7', 60, 160);
-			this.drawJob('dps', '远程8', 220, 180);
-			//近战
-			this.drawJob('dps', '近战5', 110,190,'yellow');
-			this.drawJob('dps', '近战6', 150,140,'yellow');
-			//坦克
-			this.drawJob('tank', '坦克1', 90,170,'yellow');
-			this.drawJob('tank', '坦克2', 160,160,'yellow');
+			//1组
+			this.setJob(this.player_t1_1,this.tank,'坦1');
+			this.setJob(this.player_h3_1,this.heal,'疗3');
+			this.setJob(this.player_d5_1,this.dps,'近5');
+			this.setJob(this.player_d7_1,this.dps,'远7');
+			//2组
+			this.setJob(this.player_t2_1,this.tank,'坦2');
+			this.setJob(this.player_h4_1,this.heal,'疗4');
+			this.setJob(this.player_d6_1,this.dps,'近6');
+			this.setJob(this.player_d8_1,this.dps,'远8');
 			ctx.fillStyle = "yellow";
 			ctx.fillText('没分身的时候可以多打击下', 90, 100);
-		}else if (this.time >= 100) {
-			if(this.time>=110){
+		} else if (this.time >= 100 && this.time < 140) {
+			if (this.time >= 110) {
 				let p = (this.time - 110) / 20;
 				if (p > 1) p = 1;
-				
-				//近战
-				this.drawJob('dps', '近战5', 110-30*p,190+20*p,'yellow');
-				this.drawJob('dps', '近战6', 150+50*p,140-20*p,'yellow');
-				//坦克
-				this.drawJob('tank', '坦克1', 90-50*p,170+50*p,'yellow');
-				this.drawJob('tank', '坦克2', 160+80*p,160-20*p,'yellow');
-				//近战
-				//this.drawJob('dps', '近战5', 80,200,'yellow');
-				//this.drawJob('dps', '近战6', 200,120,'yellow');
-				//坦克
-				//this.drawJob('tank', '坦克1', 40,220,'yellow');
-				//this.drawJob('tank', '坦克2', 240,140,'yellow');
-				ctx.drawImage(this.boss, 130-70*p, 160+40*p,this.boss.width*.6,this.boss.height*.6);
-				ctx.drawImage(this.boss, 130+90*p, 160-20*p,this.boss.width*.6,this.boss.height*.6);
-				//ctx.drawImage(this.boss, 60, 200,this.boss.width*.6,this.boss.height*.6);
-				//ctx.drawImage(this.boss, 220, 140,this.boss.width*.6,this.boss.height*.6);
-			}else{
-				//近战
-				this.drawJob('dps', '近战5', 110,190,'yellow');
-				this.drawJob('dps', '近战6', 150,140,'yellow');
-				//坦克
-				this.drawJob('tank', '坦克1', 90,170,'yellow');
-				this.drawJob('tank', '坦克2', 160,160,'yellow');
-				ctx.drawImage(this.boss, 130, 160,this.boss.width*.6,this.boss.height*.6);
+				//1组
+				this.moveJob(this.player_t1_1,this.player_t1_2,p,this.tank,'坦1');
+				this.moveJob(this.player_h3_1,this.player_h3_2,p,this.heal,'疗3');
+				this.moveJob(this.player_d5_1,this.player_d5_2,p,this.dps,'近5');
+				this.moveJob(this.player_d7_1,this.player_d7_2,p,this.dps,'远7');
+				//2组
+				this.moveJob(this.player_t2_1,this.player_t2_2,p,this.tank,'坦2');
+				this.moveJob(this.player_h4_1,this.player_h4_2,p,this.heal,'疗4');
+				this.moveJob(this.player_d6_1,this.player_d6_2,p,this.dps,'近6');
+				this.moveJob(this.player_d8_1,this.player_d8_2,p,this.dps,'远8');
+				if (p < 1) {
+					this.moveBoss(this.boos_center_top, this.boos_D, p, 0.6);
+					this.moveBoss(this.boos_center_top, this.boos_B, p, 0.6);
+				} else {
+					this.setBoss(this.boos_D);
+					this.setBoss(this.boos_B);
+				}
+			} else {
+				//1组
+				this.setJob(this.player_t1_1,this.tank,'坦1');
+				this.setJob(this.player_h3_1,this.heal,'疗3');
+				this.setJob(this.player_d5_1,this.dps,'近5');
+				this.setJob(this.player_d7_1,this.dps,'远7');
+				//2组
+				this.setJob(this.player_t2_1,this.tank,'坦2');
+				this.setJob(this.player_h4_1,this.heal,'疗4');
+				this.setJob(this.player_d6_1,this.dps,'近6');
+				this.setJob(this.player_d8_1,this.dps,'远8');
 			}
-			//治疗
-			this.drawJob('heal', '治疗3', 60, 180);
-			this.drawJob('heal', '治疗4', 220, 160);
-			//远程
-			this.drawJob('dps', '远程7', 60, 160);
-			this.drawJob('dps', '远程8', 220, 180);
+		} else if (this.time >= 140&&this.time<160) {
+			this.setBoss(this.boos_B);
+			this.setBoss(this.boos_D);
+			// 半径为零的圆角矩形（指定为数字）
+			this.setRound(this.boos_B, "rgba(0,128,0,0.5)");
+			this.setRound(this.boos_D, "rgba(0,0,255,0.5)");
+			//1组
+			this.setJob(this.player_t1_2,this.tank,'坦1');
+			this.setJob(this.player_h3_2,this.heal,'疗3');
+			this.setJob(this.player_d5_2,this.dps,'近5');
+			this.setJob(this.player_d7_2,this.dps,'远7');
+			//2组
+			this.setJob(this.player_t2_2,this.tank,'坦2');
+			this.setJob(this.player_h4_2,this.heal,'疗4');
+			this.setJob(this.player_d6_2,this.dps,'近6');
+			this.setJob(this.player_d8_2,this.dps,'远8');
+
+		} else if (this.time >= 160) {
+			this.setBoss(this.boos_B);
+			this.setBoss(this.boos_D);
+			//1组
+			this.setJob(this.player_t1_2,this.tank,'坦1');
+			this.setJob(this.player_h3_2,this.heal,'疗3');
+			this.setJob(this.player_d5_2,this.dps,'近5');
+			//2组
+			this.setJob(this.player_t2_2,this.tank,'坦2');
+			this.setJob(this.player_h4_2,this.heal,'疗4');
+			this.setJob(this.player_d6_2,this.dps,'近6');
+			//1组
+			this.setRound(this.player_t1_2,"rgba(206,0,225,0.5)",60);
+			this.setRound(this.player_h3_2,"rgba(206,0,225,0.5)",60);
+			this.setRound(this.player_d5_2,"rgba(206,0,225,0.5)",60);
+			//2组
+			this.setRound(this.player_t2_2,"rgba(206,0,225,0.5)",60);
+			this.setRound(this.player_h4_2,"rgba(206,0,225,0.5)",60);
+			this.setRound(this.player_d6_2,"rgba(206,0,225,0.5)",60);
+			if(this.time>190){
+				let p = (this.time-190)/10;
+				if(p>1)p=1;
+				const pointsA = this.moveJob(this.player_d7_2,this.player_d7_3,p,this.dps,'远7');
+				const pointsB = this.moveJob(this.player_d8_2,this.player_d8_3,p,this.dps,'远8');
+				this.setRound(pointsA,"rgba(206,0,225,0.5)",60);
+				this.setRound(pointsB,"rgba(206,0,225,0.5)",60);
+
+			}else{
+				this.setJob(this.player_d7_2,this.dps,'远7');
+				this.setJob(this.player_d8_2,this.dps,'远8');
+				this.setRound(this.player_d7_2,"rgba(206,0,225,0.5)",60);
+				this.setRound(this.player_d8_2,"rgba(206,0,225,0.5)",60);
+			}
+
 		}
 		this.time += 1;
-		if (this.time > 200) {
+		if (this.time > 250) {
 			this.time = 1;
 		}
 	}
+	//初始固定位置
+	boos_start = [132, 227];
+	//剧中
+	boos_center_top = [131, 150];
+	//1组
+	boos_D = [99, 208];
+	//2组
+	boos_B = [197, 152];
+	//人群
+	player_pos = [120, 260];
+	//1组
+	player_t1_1 = [112,165];
+	player_h3_1 = [120,214];
+	player_d5_1 = [130,179];
+	player_d7_1 = [91,180];
+	//2组
+	player_t2_1 = [151,166];
+	player_h4_1 = [171,152];
+	player_d6_1 = [142,128];
+	player_d8_1 = [197,179];
+	//1组2
+	player_t1_2 = [74,208];
+	player_h3_2 = [122,208];
+	player_d5_2 = [99,231];
+	player_d7_2 = [99,181];
+	//2组2
+	player_t2_2 = [222,152];
+	player_h4_2 = [171,152];
+	player_d6_2 = [197,123];
+	player_d8_2 = [197,179];
+	//远程
+	player_d7_3 = [63,130];
+	player_d8_3 = [229,224];
 	r = (194 - 132) / 2;
 	width = Math.sqrt(Math.pow(132 - 163, 2) + Math.pow(125 - 108, 2));
 	h = Math.sqrt(Math.pow(this.width, 2) - Math.pow(this.r, 2));
@@ -159,8 +236,50 @@ export default class t1s {
 	drawJob(type, text, x, y, color) {
 		const icon = this[type];
 		this.ctx.drawImage(icon, x, y);
-		this.ctx.fillStyle = color || "red";
-		this.ctx.fillText(text, x + 18, y + 12);
+		if (text) {
+			this.ctx.fillStyle = color || "yellow";
+			this.ctx.fillText(text, x + 18, y + 12);
+		}
+	}
+	setBoss(points, scale) {
+		scale = scale || 1;
+		this.ctx.drawImage(
+			this.boss,
+			points[0] - 16 * scale,
+			points[1] - 16 * scale,
+			this.boss.width * scale,
+			this.boss.height * scale
+		);
+	}
+	moveBoss(start, end, progress, scale) {
+		scale = scale || 1;
+		const x = start[0] > end[0] ? start[0] - (start[0] - end[0]) * progress : start[0] + (end[0] - start[0]) * progress;
+		const y = start[1] > end[1] ? start[1] - (start[1] - end[1]) * progress : start[1] + (end[1] - start[1]) * progress;
+		this.setBoss([x, y], scale);
+	}
+	setJob(points, type, text, color) {
+		const icon = type instanceof ImageBitmap?type:this[type];
+		const [x, y] = [points[0] - icon.width/2, points[1] - icon.height/2];
+		this.ctx.drawImage(icon, x, y);
+		if (text) {
+			this.ctx.fillStyle = color || "yellow";
+			this.ctx.fillText(text, x + 18, y + 12);
+		}
+	}
+	moveJob(start, end, progress, type, text, color) {
+		const x = start[0] > end[0] ? start[0] - (start[0] - end[0]) * progress : start[0] + (end[0] - start[0]) * progress;
+		const y = start[1] > end[1] ? start[1] - (start[1] - end[1]) * progress : start[1] + (end[1] - start[1]) * progress;
+		this.setJob([x, y], type, text, color);
+		return [x,y];
+	}
+	setRound(points, rgb, size) {
+		rgb = rgb || 'red';
+		size = size || 60;
+		this.ctx.strokeStyle = rgb;
+		this.ctx.fillStyle = rgb;
+		this.ctx.beginPath();
+		this.ctx.roundRect(points[0] - size / 2, points[1] - size / 2, size, size, [size]);
+		this.ctx.fill();
 	}
 
 }
