@@ -1,522 +1,732 @@
-export default class t1s {
+import base from "./t1s_skill_base.js";
+export default class t1s extends base {
 	constructor(elm) {
+		super();
 		const canvas = document.createElement('canvas');
 		elm.appendChild(canvas);
 		this.canvas = canvas;
 		this.start();
 	}
 	async start() {
-		this.bg = await createImageBitmap(await (await fetch('/pages/bhmt/t1s_s_1.webp')).blob(), { resizeHeight: 180 });
-		this.tank = await createImageBitmap(await (await fetch('/images/job/fh.webp')).blob());
-		this.boss = await createImageBitmap(await (await fetch('/images/boss/1.webp')).blob());
-		this.dps = await createImageBitmap(await (await fetch('/images/job/d.webp')).blob());
-		this.heal = await createImageBitmap(await (await fetch('/images/job/h.webp')).blob());
+		const fetchImage = this.fetchImage;
+		this.bg = await fetchImage('/pages/bhmt/t1s_s_1.webp', { resizeHeight: 180 });
+		this.tank = await fetchImage('/images/job/fh.webp');
+		this.boss = await fetchImage('/images/boss/1.webp');
+		this.dps = await fetchImage('/images/job/d.webp');
+		this.heal = await fetchImage('/images/job/h.webp');
 
+		this.def_1 = await fetchImage('/images/EffectsGood/210156.webp', { resizeWidth: 32 });
+		this.def_2 = await fetchImage('/images/EffectsGood/210151.webp', { resizeWidth: 32 });
+		this.def_3 = await fetchImage('/images/EffectsGood/210252.webp', { resizeWidth: 32 });
+		this.def_4 = await fetchImage('/images/EffectsGood/210256.webp', { resizeWidth: 32 });
+		this.def_5 = await fetchImage('/images/EffectsGood/210152.webp', { resizeWidth: 32 });
 
-		this.def_1 = await createImageBitmap(await (await fetch('/images/EffectsGood/210156.webp')).blob(), { resizeWidth: 32 });
-		this.def_2 = await createImageBitmap(await (await fetch('/images/EffectsGood/210151.webp')).blob(), { resizeWidth: 32 });
-		this.def_3 = await createImageBitmap(await (await fetch('/images/EffectsGood/210252.webp')).blob(), { resizeWidth: 32 });
-		this.def_4 = await createImageBitmap(await (await fetch('/images/EffectsGood/210256.webp')).blob(), { resizeWidth: 32 });
-		this.def_5 = await createImageBitmap(await (await fetch('/images/EffectsGood/210152.webp')).blob(), { resizeWidth: 32 });
-
-		this.canvas.width = this.bg.width;
-		this.canvas.height = this.bg.height * 3;
+		this.canvas.width = this.bg.width * 2 + 5;
+		this.canvas.height = this.bg.height * 3 + 10;
 		this.ctx = this.canvas.getContext('2d');
 		this.time = 1;
-		setInterval(() => this.loop(), 100);
+		this.runLoop();
 	}
 	loop() {
 		const ctx = this.ctx;
-		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		ctx.drawImage(this.bg, 0, 0);
-		ctx.drawImage(this.bg, 0, this.bg.height);
-		ctx.drawImage(this.bg, 0, this.bg.height * 2);
-		if (this.time <= 70) {
-			this.path1();
-		}
-		if (this.time < 20) {
-			this.path0();
-		} else if (this.time >= 20 && this.time < 60) {
-			this.setText('毒液 远');
-			if (this.time < 40) {
-				this.path2();
-			} else if (this.time < 60 && this.time >= 40) {
-				this.path3();
-			}
-
-		} else if (this.time < 80) {
-			this.setText('改变BOSS位置');
-			this.path4();
-		} else if (this.time < 100) {
-			this.path5();
-		} else if (this.time < 120) {
-			if(this.time<110){				
-				let p = (this.time - 80) / 10;
-				if (p > 1) p = 1;
-				this.path_floor2();
-				this.computeHexagonPoints(...this.floor_5, 0.6*p);
-				this.computeHexagonPoints(...this.floor_6, 0.6*p);
-				this.computeHexagonPoints(...this.floor_3, 0.6*p, 1);
-				this.computeHexagonPoints(...this.floor_4, 0.6*p, 1);
-				this.computeHexagonPoints(...this.floor_5, 0.6*p, 2);
-				this.computeHexagonPoints(...this.floor_6, 0.6*p, 2);
-			}else{
-				this.path_floor3();
-			}
-			this.setText('喷毒 远');
-			//p1
-			this.setJob(this.player_h_4, this.heal, '疗');
-			this.setJob(this.player_d1_4, this.dps, '近');
-			//p2
-			this.setJob(this.player_h_4, this.dps, '近', 'yellow', 1);
-			this.setJob(this.player_d1_4, this.dps, '近', 'yellow', 1);
-			//p3
-			this.setJob(this.player_d1_x_4,this.dps, '近', 'yellow', 2);
-			this.setJob(this.player_h_x_4, this.dps, '近', 'yellow', 2);
-			this.setBoss(this.boos_2);
-			if(this.time<110){				
-				let p = (this.time - 100) / 10;
-				if (p > 1) p = 1;
-				this.setJob(this.player_d2_2, this.dps, '远');
-				this.setJob(this.player_d2_2, this.heal, '疗', 'yellow', 1);
-				this.setJob(this.player_d2_2, this.heal, '疗', 'yellow', 2);
-				this.setRound(this.player_d2_2, "rgba(0,128,0," + p / 2 + ")", 30);
-				this.setRound(this.player_d2_2, "rgba(0,128,0," + p / 2 + ")", 30, 1);
-				this.setRound(this.player_d2_2, "rgba(0,128,0," + p / 2 + ")", 30, 2);
-				this.moveJob(this.player_t_3, this.player_h_4, p, this.tank, '坦');
-				this.moveJob(this.player_t_3, this.player_h_4, p, this.tank, '坦', 'yellow', 1);
-				this.moveJob(this.player_t_3, this.player_h_x_4, p, this.tank, '坦', 'yellow', 2);
-			}else{
-				let p = (this.time - 110) / 10;
-				if (p > 1) p = 1;
-				this.setJob(this.player_h_4, this.tank, '坦');
-				this.setJob(this.player_h_4, this.tank, '坦', 'yellow', 1);
-				this.setJob(this.player_h_x_4, this.tank, '坦', 'yellow', 2);
-				this.setRound(this.player_d2_2, "rgba(0,128,0,1)", 30);
-				this.setRound(this.player_d2_2, "rgba(0,128,0,1)", 30, 1);
-				this.setRound(this.player_d2_2, "rgba(0,128,0,1)", 30, 2);
-				this.moveJob(this.player_d2_2, this.player_d1_4, p, this.dps, '远');
-				this.moveJob(this.player_d2_2, this.player_d1_4, p, this.heal, '疗', 'yellow', 1);
-				this.moveJob(this.player_d2_2, this.player_d1_x_4, p, this.heal, '疗', 'yellow', 2);
-			}
-			
-		} else if(this.time<140){
-			if(this.time<130){
-				let p = (this.time - 120) / 10;
-				if (p > 1) p = 1;
-				this.path_floor3();
-				this.setJob(this.player_h_4, this.tank, '坦');
-				this.setJob(this.player_h_4, this.tank, '坦', 'yellow', 1);
-				this.setJob(this.player_h_x_4, this.tank, '坦', 'yellow', 2);
-				this.setRound(this.player_d2_2, "rgba(0,128,0,1)", 30);
-				this.setRound(this.player_d2_2, "rgba(0,128,0,1)", 30, 1);
-				this.setRound(this.player_d2_2, "rgba(0,128,0,1)", 30, 2);
-				this.setJob(this.player_d1_4,this.dps, '远');
-				this.setJob(this.player_d1_4, this.heal, '疗', 'yellow', 1);
-				this.setJob(this.player_d1_x_4,this.heal, '疗', 'yellow', 2);
-				this.setRound(this.player_h_4, "rgba(255,255,0,0.3)", 40);
-				this.setRound(this.player_h_4, "rgba(255,255,0,0.3)", 40, 1);
-				this.setRound(this.player_h_x_4, "rgba(255,255,0,0.3)", 40, 2);
-				this.setBoss(this.boos_2);
-			}else{
-				let p = (this.time - 130) / 10;
-				if (p > 1) p = 1;
-				this.computeHexagonPoints(...this.floor_3, 0.6);
-				this.computeHexagonPoints(...this.floor_4, 0.6);
-				this.computeHexagonPoints(...this.floor_5, 0.6, 1);
-				this.computeHexagonPoints(...this.floor_6, 0.6, 1);
-				this.computeHexagonPoints(...this.floor_1, 0.6, 2);
-				this.computeHexagonPoints(...this.floor_2, 0.6, 2);
-				this.computeHexagonPoints(...this.floor_5, 0.6);
-				this.computeHexagonPoints(...this.floor_6, 0.6);
-				this.computeHexagonPoints(...this.floor_3, 0.6, 1);
-				this.computeHexagonPoints(...this.floor_4, 0.6, 1);
-				this.computeHexagonPoints(...this.floor_5, 0.6, 2);
-				this.computeHexagonPoints(...this.floor_6, 0.6, 2);
-
-				this.setJob([197,85], this.dps, '远7/8', 'yellow');
-				this.moveJob(this.player_d2_2,[176,50], p, this.dps, '近7/8', 'yellow', 1);
-				this.setJob([119,86],this.dps, '近7/8', 'yellow', 2);
-				//p1
-				this.moveJob(this.player_h_4,this.player_h_x_4,p, this.heal, '疗');
-				this.moveJob(this.player_d1_4,this.player_h_x_4,p, this.dps, '近');
-				//p2
-				this.moveJob(this.player_h_4,this.player_h_x_4,p, this.heal, '疗', 'yellow', 1);
-				this.moveJob(this.player_d1_4,this.player_h_x_4,p, this.dps, '近', 'yellow', 1);
-				//p3
-				this.moveJob(this.player_h_x_4,this.player_h_4,p, this.heal, '疗', 'yellow', 2);
-				this.moveJob(this.player_h_x_4,this.player_h_4,p, this.dps, '近', 'yellow', 2);
-
-				this.moveJob(this.player_h_4, this.player_t_3, p, this.tank, '坦');
-				this.moveJob(this.player_h_4, this.player_t_3, p, this.tank, '坦', 'yellow', 1);
-				this.moveJob(this.player_h_x_4, this.player_h_4, p, this.tank, '坦', 'yellow', 2);
-				this.setBoss(this.boos_2);
-				
-			}
-			this.setText('分摊');
-		} else if(this.time<160){
-			this.computeHexagonPoints(...this.floor_5, 0.6);
-			this.computeHexagonPoints(...this.floor_6, 0.6);
-			this.computeHexagonPoints(...this.floor_3, 0.6, 1);
-			this.computeHexagonPoints(...this.floor_4, 0.6, 1);
-			this.computeHexagonPoints(...this.floor_5, 0.6, 2);
-			this.computeHexagonPoints(...this.floor_6, 0.6, 2);
-			
-			this.setRound(this.setJob(this.player_t_3, this.tank, '坦'),"rgba(206,0,225,0.5)", 60);
-			this.setRound(this.setJob(this.player_t_3, this.tank, '坦', 'yellow', 1),"rgba(206,0,225,0.5)", 60);
-			this.setRound(this.setJob(this.player_t_3, this.tank, '坦', 'yellow', 2),"rgba(206,0,225,0.5)", 60);
-			this.setBoss(this.boos_2);
-			this.setText('紫圈 毒液喷发(不要踩发光地板)');
+		this.WriteBg(3, 2);
+		this.drawFloor();
+		this.drawText();
+		this.drawBOSS();
+		this.drawHeal();
+		this.drawTank();
+		this.drawDPS1();
+		this.drawDPS2();
+		this.drawDPS3();
+		if(this.time>150&&this.time<170){
+			this.Each((i,j)=>{
+				let offset;
+				if(i==2){
+					offset = this.SetOffset([140,96],j,i);
+				}else{
+					offset = this.SetOffset([185,96],j,i);
+				}
+				this.WriteShareDGM(offset,1);
+			});
 		}
 		this.time += 1;
-		if (this.time > 180) {
+		if (this.time > 250) {
 			this.time = 1;
 		}
 	}
 	//初始固定位置
 	boos_1 = [197, 87];
 	boos_2 = [163, 108];
-	//1组
-	player_t_1 = [182, 113];
-	player_h_1 = [179, 65];
-	player_d1_1 = [220, 87];
-	player_d2_1 = [106, 87];
+	WriteTips(text) {
+		this.WriteBigText([30, 30], 'A' + text);
+		this.WriteBigText([30, 35 + this.bg.height], 'B注意石板顺序');
+		this.WriteBigText([30, 40 + this.bg.height * 2], 'C');
+	}
+	drawFloor() {
+		let opt = 0.5;
+		const floor = [
+			[],
+			[130, 88.5],
+			[163, 144],
+			[195, 88.5],
+			[227.5, 32.5],
+			[98, 32.5],
+			[163, 32.5]
+		];
+		let map = [
+			[[30, 150], [1, 2], [1, 2], [3, 4, 5, 6]],
+			[[70, 180], [3, 4], [5, 6], [1, 2]],
+			[[100, 190], [5, 6], [3, 4], []]
+		];
+		for (const points of map) {
+			const time = points.shift();
+			if (this.time >= time[0] && this.time < time[1]) {
+				let p = this.perSent(time[0], 10);
+				for (let i = 0; i < 2; i++) {
+					for (let q = 0; q < points.length; q++) {
+						const points2 = points[q];
+						for (let pos of points2) {
+							let [x, y] = floor[pos];
+							this.WriteSix(this.SetOffset([x, y], i, q), p * opt);
+						}
+					}
 
-	player_t_2 = [136, 122];
-	player_d2_2 = [133, 63];
+				}
 
-
-	player_t_3 = [163, 142];
-
-	player_d1_4 = [194, 98];
-	player_h_4 = [180, 87];
-
-	player_d1_x_4 = [146, 99];
-	player_h_x_4 = [146, 89];
-
-
-
-	floor_1 = [130, 87];
-	floor_2 = [163, 143];
-
-	floor_3 = [196, 88];
-	floor_4 = [228, 32];
-
-	floor_5 = [97, 32];
-	floor_6 = [165, 32];
-	r = (194 - 132) / 2;
-	width = Math.sqrt(Math.pow(132 - 163, 2) + Math.pow(125 - 108, 2));
-	h = Math.sqrt(Math.pow(this.width, 2) - Math.pow(this.r, 2));
-	computeHexagonPoints(x, y, opt, height) {
-		const ctx = this.ctx;
-		const points = [];
-		if (height) {
-			y += this.bg.height * height;
-		}
-		for (let i = 0; i < 4; i++) {
-			points[i] = [x, y];
-			points[4 + i] = [x, y];
-			if (i == 1 || i == 2) {
-				points[i][0] -= this.r;
-				points[i + 4][0] += this.r;
-			}
-			if (i < 2) {
-				points[i][1] -= this.h * (2 - i);
-				points[i + 4][1] -= this.h * (2 - i);
-			}
-			if (i >= 2) {
-				points[i][1] += this.h * (i - 1);
-				points[i + 4][1] += this.h * (i - 1);
 			}
 		}
-		ctx.strokeStyle = "rgba(255,255,255," + opt + ")";
-		ctx.fillStyle = "rgba(255,255,255," + opt + ")";
-		ctx.beginPath();
-		ctx.moveTo(points[0][0], points[0][1]);
-		for (let p of points) {
-			ctx.lineTo(p[0], p[1]);
-		}
-		ctx.closePath();
-		ctx.fill();
-	}
-	drawJob(type, text, x, y, color) {
-		const icon = this[type];
-		this.ctx.drawImage(icon, x, y);
-		if (text) {
-			this.ctx.fillStyle = color || "yellow";
-			this.ctx.fillText(text, x + 18, y + 12);
-		}
-	}
-	setBoss(points, scale) {
-		scale = scale || 1;
-		this.ctx.drawImage(
-			this.boss,
-			points[0] - 16 * scale,
-			points[1] - 16 * scale,
-			this.boss.width * scale,
-			this.boss.height * scale
-		);
-		this.ctx.drawImage(
-			this.boss,
-			points[0] - 16 * scale,
-			points[1] - 16 * scale + this.bg.height,
-			this.boss.width * scale,
-			this.boss.height * scale
-		);
-		this.ctx.drawImage(
-			this.boss,
-			points[0] - 16 * scale,
-			points[1] - 16 * scale + this.bg.height * 2,
-			this.boss.width * scale,
-			this.boss.height * scale
-		);
-	}
-	moveBoss(start, end, progress, scale) {
-		scale = scale || 1;
-		const x = start[0] > end[0] ? start[0] - (start[0] - end[0]) * progress : start[0] + (end[0] - start[0]) * progress;
-		const y = start[1] > end[1] ? start[1] - (start[1] - end[1]) * progress : start[1] + (end[1] - start[1]) * progress;
-		this.setBoss([x, y], scale);
-	}
-	setJob(points, type, text, color, height) {
-		const icon = type instanceof ImageBitmap ? type : this[type];
-		let [x, y] = points;
-		// [points[0] - icon.width / 2, points[1] - icon.height / 2];
-		if (height) {
-			y += this.bg.height * height;
-		}
-		this.ctx.drawImage(icon, x - icon.width / 2, y - icon.height / 2);
-		if (text) {
-			this.ctx.fillStyle = color || "yellow";
-			this.ctx.fillText(text, x - icon.width / 2 + 18, y - icon.height / 2 + 12);
-		}
-		return [x, y];
-	}
-	moveJob(start, end, progress, type, text, color, height) {
-		const x = start[0] > end[0] ? start[0] - (start[0] - end[0]) * progress : start[0] + (end[0] - start[0]) * progress;
-		const y = start[1] > end[1] ? start[1] - (start[1] - end[1]) * progress : start[1] + (end[1] - start[1]) * progress;
-		this.setJob([x, y], type, text, color, height);
-		return [x, y];
-	}
-	setRound(points, rgb, size, height) {
-		rgb = rgb || 'red';
-		size = size || 60;
-		let [x, y] = [points[0] - size / 2, points[1] - size / 2];
-		if (height) {
-			y += this.bg.height * height;
-		}
-		this.ctx.strokeStyle = rgb;
-		this.ctx.fillStyle = rgb;
-		this.ctx.beginPath();
-		this.ctx.roundRect(x, y, size, size, [size]);
-		this.ctx.fill();
-	}
-	path0() {
-		this.setText('紫圈');
-		//p1
-		this.setRound(this.player_t_1, "rgba(206,0,225,0.5)", 60);
-		this.setRound(this.player_h_1, "rgba(206,0,225,0.5)", 60);
-		this.setRound(this.player_d1_1, "rgba(206,0,225,0.5)", 60);
-		this.setRound(this.player_d2_1, "rgba(206,0,225,0.5)", 60);
-		this.setJob(this.player_t_1, this.tank, '坦');
-		this.setJob(this.player_h_1, this.heal, '疗');
-		this.setJob(this.player_d1_1, this.dps, '近');
-		this.setJob(this.player_d2_1, this.dps, '远');
-		//p2
-		this.setRound(this.player_t_1, "rgba(206,0,225,0.5)", 60, 1);
-		this.setRound(this.player_h_1, "rgba(206,0,225,0.5)", 60, 1);
-		this.setRound(this.player_d1_1, "rgba(206,0,225,0.5)", 60, 1);
-		this.setRound(this.player_d2_1, "rgba(206,0,225,0.5)", 60, 1);
-		this.setJob(this.player_t_1, this.tank, '坦', 'yellow', 1);
-		this.setJob(this.player_d2_1, this.heal, '疗', 'yellow', 1);
-		this.setJob(this.player_h_1, this.dps, '近', 'yellow', 1);
-		this.setJob(this.player_d1_1, this.dps, '近', 'yellow', 1);
-		//p3
-		this.setRound(this.player_t_1, "rgba(206,0,225,0.5)", 60, 2);
-		this.setRound(this.player_h_1, "rgba(206,0,225,0.5)", 60, 2);
-		this.setRound(this.player_d1_1, "rgba(206,0,225,0.5)", 60, 2);
-		this.setRound(this.player_d2_1, "rgba(206,0,225,0.5)", 60, 2);
-		this.setJob(this.player_t_1, this.tank, '坦', 'yellow', 2);
-		this.setJob(this.player_d2_1, this.heal, '疗', 'yellow', 2);
-		this.setJob(this.player_h_1, this.dps, '近', 'yellow', 2);
-		this.setJob(this.player_d1_1, this.dps, '近', 'yellow', 2);
-		this.setBoss(this.boos_1);
 
 	}
-	path1() {
-		//p1
-		this.setJob(this.player_h_1, this.heal, '疗');
-		this.setJob(this.player_d1_1, this.dps, '近');
-		//p2
-		this.setJob(this.player_h_1, this.dps, '近', 'yellow', 1);
-		this.setJob(this.player_d1_1, this.dps, '近', 'yellow', 1);
-		//p3
-		this.setJob(this.player_h_1, this.dps, '近', 'yellow', 2);
-		this.setJob(this.player_d1_1, this.dps, '近', 'yellow', 2);
-	}
-	path2() {
-		let p = (this.time - 20) / 20;
-		this.computeHexagonPoints(...this.floor_1, p * 0.8);
-		this.computeHexagonPoints(...this.floor_2, p * 0.8);
-		this.computeHexagonPoints(...this.floor_1, p * 0.8, 1);
-		this.computeHexagonPoints(...this.floor_2, p * 0.8, 1);
-		this.computeHexagonPoints(...this.floor_3, p * 0.8, 2);
-		this.computeHexagonPoints(...this.floor_4, p * 0.8, 2);
-
-		this.setJob(this.player_t_1, this.tank, '坦');
-		this.setJob(this.player_t_1, this.tank, '坦', 'yellow', 1);
-		this.setJob(this.player_t_1, this.tank, '坦', 'yellow', 2);
-
-
-		this.setJob(this.player_d2_1, this.dps, '远');
-		this.setJob(this.player_d2_1, this.heal, '疗', 'yellow', 1);
-		this.setJob(this.player_d2_1, this.heal, '疗', 'yellow', 2);
-		this.setRound(this.player_d2_1, "rgba(0,128,0," + p / 2 + ")", 30);
-		this.setRound(this.player_d2_1, "rgba(0,128,0," + p / 2 + ")", 30, 1);
-		this.setRound(this.player_d2_1, "rgba(0,128,0," + p / 2 + ")", 30, 2);
-		this.setBoss(this.boos_1);
-	}
-	path3() {
-		let p = (this.time - 40) / 20;
-		this.path_floor1();
-		this.computeHexagonPoints(...this.floor_3, p * 0.8);
-		this.computeHexagonPoints(...this.floor_4, p * 0.8);
-		this.computeHexagonPoints(...this.floor_5, p * 0.8, 1);
-		this.computeHexagonPoints(...this.floor_6, p * 0.8, 1);
-		this.computeHexagonPoints(...this.floor_1, p * 0.8, 2);
-		this.computeHexagonPoints(...this.floor_2, p * 0.8, 2);
-		this.moveJob(this.player_d2_1, this.player_d2_2, p, this.dps, '远');
-		this.moveJob(this.player_d2_1, this.player_d2_2, p, this.heal, '疗', 'yellow', 1);
-		this.moveJob(this.player_d2_1, this.player_d2_2, p, this.heal, '疗', 'yellow', 2);
-		this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30);
-		this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30, 1);
-		this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30, 2);
-		let a = this.moveJob(this.player_t_1, this.player_t_2, p, this.tank, '坦');
-		let b = this.moveJob(this.player_t_1, this.player_t_2, p, this.tank, '坦', 'yellow', 1);
-		let c = this.moveJob(this.player_t_1, this.player_t_2, p, this.tank, '坦', 'yellow', 2);
-		this.setBoss(this.boos_1);
-		this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30);
-		this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30, 1);
-		this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30, 2);
-		//if(this.time%2==1){
-		//	this.setRound(a,"rgba(206,0,225,1)",25);
-		//	this.setRound(b,"rgba(206,0,225,1)",25,1);
-		//	this.setRound(c,"rgba(206,0,225,1)",25,2);
-		//}
-
-	}
-	path4() {
-		;
-		this.path_floor2();
-		this.setJob(this.player_d2_2, this.dps, '远');
-		this.setJob(this.player_d2_2, this.heal, '疗', 'yellow', 1);
-		this.setJob(this.player_d2_2, this.heal, '疗', 'yellow', 2);
-		if (this.time <= 70) {
-			let p = (this.time - 60) / 10;
-			this.moveBoss(this.boos_1, this.boos_2, p);
-			this.setJob(this.player_t_2, this.tank, '坦');
-			this.setJob(this.player_t_2, this.tank, '坦', 'yellow', 1);
-			this.setJob(this.player_t_2, this.tank, '坦', 'yellow', 2);
-			this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30);
-			this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30, 1);
-			this.setRound(this.player_d2_1, "rgba(0,128,0,1)", 30, 2);
+	drawBOSS() {
+		const boos_1 = [197, 87];
+		const boos_2 = [163, 108];
+		if (this.time <= 40) {
+			this.Each((i, j) => this.WriteIcon(this.boss, this.SetOffset(boos_1, j, i)));
+		} else if (this.time <= 50) {
+			let p = this.perSent(40, 10);
+			this.Each((i, j) => {
+				const offset = this.MoveOffset(boos_1, boos_2, p, j, i);
+				this.WriteIcon(this.boss, offset);
+			});
 		} else {
-			let p = (this.time - 70) / 10;
-			if (p > 1) p = 1;
-			this.moveJob(this.player_t_2, this.player_t_3, p, this.tank, '坦');
-			this.moveJob(this.player_t_2, this.player_t_3, p, this.tank, '坦', 'yellow', 1);
-			this.moveJob(this.player_t_2, this.player_t_3, p, this.tank, '坦', 'yellow', 2);
-			//p1
-			this.setJob(this.player_h_1, this.heal, '疗');
-			this.setJob(this.player_d1_1, this.dps, '近');
-			//p2
-			this.setJob(this.player_h_1, this.dps, '近', 'yellow', 1);
-			this.setJob(this.player_d1_1, this.dps, '近', 'yellow', 1);
-			//p3
-			this.setJob(this.player_h_1, this.dps, '近', 'yellow', 2);
-			this.setJob(this.player_d1_1, this.dps, '近', 'yellow', 2);
-			this.setBoss(this.boos_2);
+			this.Each((i, j) => this.WriteIcon(this.boss, this.SetOffset(boos_2, j, i)));
 		}
-
 	}
-	path5() {
-		this.setText('致死毒泡');
-		this.path_floor2();
-		let p = (this.time - 80) / 10;
-		if (p > 1) p = 1;
-		this.setJob(this.player_d2_2, this.dps, '远');
-		this.setJob(this.player_d2_2, this.heal, '疗', 'yellow', 1);
-		this.setJob(this.player_d2_2, this.heal, '疗', 'yellow', 2);
-		//p1
-		this.moveJob(this.player_h_1,this.player_h_4,p, this.heal, '疗');
-		this.moveJob(this.player_d1_1,this.player_d1_4,p, this.dps, '近');
-		//p2
-		this.moveJob(this.player_h_1,this.player_h_4,p, this.dps, '近', 'yellow', 1);
-		this.moveJob(this.player_d1_1,this.player_d1_4,p, this.dps, '近', 'yellow', 1);
-		//p3
-		this.moveJob(this.player_h_1,this.player_h_x_4,p, this.dps, '近', 'yellow', 2);
-		this.moveJob(this.player_d1_1,this.player_d1_x_4,p, this.dps, '近', 'yellow', 2);
+	drawText() {
+		switch (true) {
+			case this.time < 20:
+				this.WriteTips('紫圈');
+				break;
 
-		let a = this.setJob(this.player_t_3, this.tank, '坦');
-		let b = this.setJob(this.player_t_3, this.tank, '坦', 'yellow', 1);
-		let c = this.setJob(this.player_t_3, this.tank, '坦', 'yellow', 2);
-		if (this.time < 90) {
-			if (this.time % 2 == 1) {
-				this.setRound(a, "rgba(206,0,225,1)", 25);
-				this.setRound(b, "rgba(206,0,225,1)", 25, 1);
-				this.setRound(c, "rgba(206,0,225,1)", 25, 2);
+			case this.time < 40:
+				//20-40
+				this.WriteTips('第一次地板');
+				break;
+			case this.time < 60:
+				//40-60
+				this.WriteTips('喷毒');
+				break;
+			case this.time < 80:
+				//60-80
+				this.WriteTips('第二次地板');
+				break;
+			case this.time < 100:
+				this.WriteTips('致死毒泡 减伤');
+				for (let i = 1; i <= 4; i++) {
+					const icon = this['def_' + i];
+					let [x, y] = [0, 0];
+					if (i == 2 || i == 4) {
+						y += 35;
+					} else {
+						x += 35
+					}
+					this.ctx.drawImage(
+						icon,
+						(i - 1) * 32 + this.bg.width - 20,
+						0
+					);
+				}
+				this.ctx.fillStyle = "red";
+				this.ctx.font = 'bold 32px serif';
+				this.ctx.fillText('紧急减伤', this.bg.width - 40, 64);
+				this.ctx.font = 'bold 14px serif';
+				this.ctx.drawImage(
+					this.def_5,
+					this.bg.width + 100,
+					32
+				);
+				break;
+			case this.time < 120:
+				this.WriteTips('第三次地板');
+				break;
+			case this.time < 140:
+				//120-140
+				this.WriteTips('喷毒');
+				break;
+			case this.time < 160:
+				//140 - 160
+				this.WriteTips('分摊');
+				break;
+			case this.time < 180:
+				//160-180
+				this.WriteTips('喂蛇');
+				break;
+			case this.time < 200:
+				this.WriteTips('毒液喷发(不要踩发光地板)');
+				break;
+		}
+	}
+	/**
+	 * 坦克
+	 */
+	drawTank() {
+		const points = [
+			[196, 112],//原始 0
+			[136, 134],//拉怪 1
+			[163, 137],//固定底 2
+			[188, 105],//右 3
+			[140, 105],//左 4
+		];;
+		switch (true) {
+			//分裂
+			case this.time <= 30: {
+				this.Each((i, j) => {
+					const offset = this.SetOffset(points[0], j, i);
+					this.WriteIcon(this.tank, offset);
+					if (this.time <= 20) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+			}
+			case this.time <= 50: {
+				//转移BOSS
+				let p = this.perSent(30, 10);
+				this.Each((i, j) => {
+					const offset = this.MoveOffset(points[0], points[1], p, j, i);
+					this.WriteIcon(this.tank, offset);
+				});
+				break;
+			}
+			case this.time <= 100: {
+				//转移BOSS
+				let p = this.perSent(50, 10);
+				this.Each((i, j) => {
+					const offset = this.MoveOffset(points[1], points[2], p, j, i);
+					this.WriteIcon(this.tank, offset, this.time >= 80 && this.time < 90 ? '死刑' : undefined);
+					if (this.time >= 80 && this.time < 90) {
+						if (this.time % 2 == 1) {
+							//死刑
+							this.WriteCircle(offset, "rgba(206,0,225,1)", 25);
+						}
+					}
+				});
+				break;
+			}
+			case this.time <= 120: {
+				//转移石板
+				let p = this.perSent(110, 10);
+				this.Each((i, j) => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[2], points[4], p, j, i);
+					} else {
+						offset = this.MoveOffset(points[2], points[3], p, j, i);
+					}
+					this.WriteIcon(this.tank, offset);
+				});
+				break;
+			}
+			case this.time <= 185: {
+				let p = this.perSent(165, 5);
+				this.Each(
+					(i, j) => {
+						if (i != 2) {
+							let offset1 = this.MoveOffset(points[3], points[2], p, j, i);
+							this.WriteIcon(this.tank, offset1);
+							if (this.time >= 180) {
+								//紫圈
+								this.WriteCircle(offset1, "rgba(206,0,225,0.5)", 60);
+							}
+						}
+					},
+					j => {
+						let offset;
+						if (this.time < 175) {
+							offset = this.MoveOffset(points[4], points[3], p, j, 2);
+						} else {
+							let p2 = this.perSent(175, 10);
+							offset = this.MoveOffset(points[3], points[2], p2, j, 2);
+						}
+						this.WriteIcon(this.tank, offset);
+						if (this.time >= 180) {
+							//紫圈
+							this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+						}
+					}
+				);
+				break;
+			}
+			default: {
+				//转移石板
+				//图1/2
+				this.Each(
+					(i, j) => {
+						let offset = this.SetOffset(points[2], j, i);
+						this.WriteIcon(this.tank, offset);
+						if (this.time >= 180) {
+							//紫圈
+							this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+						}
+					});
+				break;
 			}
 		}
-		this.setDef();
-		this.setBoss(this.boos_2);
+	}
+	/**
+	 * 近战
+	 */
+	drawDPS1() {
+		//输出5/6
+		let points = [
+			[220, 86],
+			[188, 103],
+			[135, 103]
+		];
+		switch (true) {
+			case this.time <= 40: {
+				this.Each((i, j) => {
+					let offset = this.SetOffset(points[0], j, i);
+					this.WriteIcon(this.dps, offset, '近1');
+					if (this.time < 20) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
 
-	}
-	path_floor1() {
-		this.computeHexagonPoints(...this.floor_1, 0.6);
-		this.computeHexagonPoints(...this.floor_2, 0.6);
-		this.computeHexagonPoints(...this.floor_1, 0.6, 1);
-		this.computeHexagonPoints(...this.floor_2, 0.6, 1);
-		this.computeHexagonPoints(...this.floor_3, 0.6, 2);
-		this.computeHexagonPoints(...this.floor_4, 0.6, 2);
-	}
-	path_floor2() {
-		this.path_floor1();
-		this.computeHexagonPoints(...this.floor_3, 0.6);
-		this.computeHexagonPoints(...this.floor_4, 0.6);
-		this.computeHexagonPoints(...this.floor_5, 0.6, 1);
-		this.computeHexagonPoints(...this.floor_6, 0.6, 1);
-		this.computeHexagonPoints(...this.floor_1, 0.6, 2);
-		this.computeHexagonPoints(...this.floor_2, 0.6, 2);
-	}
-	path_floor3() {
-		this.path_floor2();
-		this.computeHexagonPoints(...this.floor_5, 0.6);
-		this.computeHexagonPoints(...this.floor_6, 0.6);
-		this.computeHexagonPoints(...this.floor_3, 0.6, 1);
-		this.computeHexagonPoints(...this.floor_4, 0.6, 1);
-		this.computeHexagonPoints(...this.floor_5, 0.6, 2);
-		this.computeHexagonPoints(...this.floor_6, 0.6, 2);
-	}
-	setText(text) {
-		this.ctx.fillStyle = "yellow";
-		this.ctx.font = 'bold 32px serif';
-		this.ctx.fillText('A ' + text, 30, 30);
-		this.ctx.fillText('B ' + text, 30, this.bg.height + 30);
-		this.ctx.fillText('C ' + text, 30, this.bg.height * 2 + 30);
-		this.ctx.font = 'bold 14px serif';
-	}
-	setDef() {
-		let [x, y] = [219, 113];
-		for (let i = 0; i < 3; i++) {
-			this.ctx.drawImage(
-				this.def_1,
-				x - this.def_1.width / 2,
-				y + this.bg.height * i - this.def_1.height / 2
-			);
-			this.ctx.drawImage(this.def_2, x + 40 - this.def_2.width / 2, y + this.bg.height * i - this.def_2.height / 2);
-			this.ctx.drawImage(this.def_3, x - this.def_3.width / 2, y + 40 + this.bg.height * i - this.def_3.height / 2);
-			this.ctx.drawImage(this.def_4, x + 40 - this.def_4.width / 2, y + 40 + this.bg.height * i - this.def_4.height / 2);
+				});
+				break;
+			}
+			case this.time < 160: {
+				let p = this.perSent(50, 10);
+				this.Each((i, j) => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[0], points[2], p, j, i);
+					} else {
+						offset = this.MoveOffset(points[0], points[1], p, j, i);
+
+					}
+					this.WriteIcon(this.dps, offset, '近1');
+
+				});
+				break;
+			}
+			case this.time < 175: {
+				let p = this.perSent(165, 10);
+				this.Each((i, j) => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[2], points[1], p, j, i);
+					} else {
+						offset = this.MoveOffset(points[1], points[2], p, j, i);
+					}
+					this.WriteIcon(this.dps, offset, '近1');
+				});
+				break;
+			}
+
+			default: {
+				this.Each((i, j) => {
+					let offset;
+					if (i == 2) {
+						offset = this.SetOffset(points[1], j, i);
+					} else {
+						offset = this.SetOffset(points[2], j, i);
+					}
+					this.WriteIcon(this.dps, offset, '近1');
+					if (this.time >= 180) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+
+			}
 		}
-
 	}
+	/**
+	 * 近战2
+	 */
+	drawDPS2() {
+		//输出6/8 近
+		let points = [
+			[168, 83], //0
+			[153, 83],//左 1
+			[173, 83],//右 2
 
+			[129, 52],//远左 3
+			[204, 50],//远右 4
+
+			[164, 56],//上 5
+
+
+			[135, 83],//x近左 6
+			[190, 83],//x近右 7
+		];
+		switch (true) {
+			case this.time <= 40: {
+				this.Each(null, null, i => {
+					let offset = this.SetOffset(points[0], 1, i);
+					this.WriteIcon(this.dps, offset, '近2');
+					if (this.time < 20) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+			}
+			case this.time <= 60: {
+				let p = this.perSent(50, 10);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[0], points[1], p, 1, i);
+					} else {
+						offset = this.MoveOffset(points[0], points[2], p, 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+					if (this.time > 55) {
+						//毒
+						this.WriteCircle(offset, "rgba(25,135,84," + p * 0.6 + ")", 40);
+					}
+
+				});
+				break;
+			}
+			case this.time <= 70: {
+				let p = this.perSent(60, 5);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[1], points[3], p, 1, i);
+					} else {
+						offset = this.MoveOffset(points[2], points[4], p, 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+					this.WriteCircle(offset, "rgba(25,135,84," + p * 0.6 + ")", 40);
+				});
+				break;
+			}
+			case this.time < 130: {
+				let p = this.perSent(70, 5);
+				this.Each(null, null, i => {
+					let offset, offset2;
+					if (i == 2) {
+						offset = this.MoveOffset(points[3], points[1], p, 1, i);
+						offset2 = this.SetOffset(points[3], 1, i);
+					} else {
+						offset = this.MoveOffset(points[4], points[2], p, 1, i);
+						offset2 = this.SetOffset(points[4], 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+					if (this.time < 80) {
+						this.WriteCircle(offset2, "rgba(25,135,84,1)", 40);
+					}
+				});
+				break;
+			}
+			case this.time < 140: {
+				let p = this.perSent(130, 5);
+				this.Each(null, null, i => {
+					let offset, offset2;
+					if (i == 2) {
+						offset = this.MoveOffset(points[1], points[3], p, 1, i);
+					} else {
+						offset = this.MoveOffset(points[2], points[4], p, 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+					this.WriteCircle(offset, "rgba(25,135,84,0.5)", 40);
+				});
+				break;
+			}
+			case this.time < 165: {
+				//喂蛇
+				let p = this.perSent(140, 5);
+				this.Each(null, null, i => {
+					let offset, offset2;
+					if (i == 2) {
+						offset = this.MoveOffset(points[3], points[1], p, 1, i);
+						offset2 = this.SetOffset(points[3], 1, i);
+					} else {
+						offset = this.MoveOffset(points[4], points[2], p, 1, i);
+						offset2 = this.SetOffset(points[4], 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+					if (this.time <= 155) {
+						this.WriteCircle(offset2, "rgba(25,135,84,1)", 40);
+					}
+				});
+				break;
+			}
+			case this.time < 175: {
+				//毒液分摊
+				let p = this.perSent(165, 10);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 0) {
+						offset = this.MoveOffset(points[1], points[7], p, 1, i);
+					} else if (i == 1) {
+						offset = this.MoveOffset(points[1], points[5], p, 1, i);
+					} else {
+						offset = this.MoveOffset(points[2], points[6], p, 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+				});
+				break;
+			}
+			default: {
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.SetOffset(points[6], 1, i);
+					} else if (i == 1) {
+						offset = this.SetOffset(points[5], 1, i);
+					} else {
+						offset = this.SetOffset(points[2], 1, i);
+					}
+					this.WriteIcon(this.dps, offset, '近2');
+					if (this.time >= 180) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+			}
+		}
+	}
+	/**
+	 * 远程2
+	 */
+	drawDPS3() {
+		//输出6/8 远
+		let points = [
+			[168, 86],//0
+
+			[100, 100],//远左 1
+			[222, 100],//远右 2
+
+			[100, 72],//远左上 3
+			[222, 72],//远右上 4
+
+			[153, 83],//近左 5
+			[173, 83],//近右 6
+
+			[164, 56],//上 7
+
+		];
+		switch (true) {
+			case this.time <= 40: {
+				this.Each(null, null, i => {
+					let offset = this.SetOffset(points[0], 0, i);
+					this.WriteIcon(this.dps, offset, '远2');
+					if (this.time < 20) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+			}
+			case this.time < 60: {
+				let p = this.perSent(50, 10);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[0], points[1], p, 0, i);
+					} else {
+						offset = this.MoveOffset(points[0], points[2], p, 0, i);
+					}
+					this.WriteIcon(this.dps, offset, '远2');
+					if (this.time > 55) {
+						//毒
+						this.WriteCircle(offset, "rgba(25,135,84," + p * 0.6 + ")", 40);
+					}
+				});
+				break;
+			}
+			case this.time < 65: {
+				let p = this.perSent(60, 5);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[1], points[3], p, 0, i);
+					} else {
+						offset = this.MoveOffset(points[2], points[4], p, 0, i);
+					}
+					this.WriteIcon(this.dps, offset, '远2');
+					if (i == 2) {
+						//毒
+						this.WriteCircle(this.SetOffset(points[1], 0, i), "rgba(25,135,84,0.6)", 40);
+					} else {
+						//毒
+						this.WriteCircle(this.SetOffset(points[2], 0, i), "rgba(25,135,84,0.6)", 40);
+					}
+				});
+				break;
+			}
+			case this.time < 120: {
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.SetOffset(points[3], 0, i);
+					} else {
+						offset = this.SetOffset(points[4], 0, i);
+					}
+					this.WriteIcon(this.dps, offset, '远2');
+					if (this.time < 80) {
+						if (i == 2) {
+							this.WriteCircle(this.SetOffset(points[1], 0, i), "rgba(25,135,84,0.6)", 40);
+						} else {
+							this.WriteCircle(this.SetOffset(points[2], 0, i), "rgba(25,135,84,0.6)", 40);
+						}
+					}
+				});
+				break;
+			}
+			case this.time < 160: {
+				let p = this.perSent(130, 5);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[3], points[5], p, 0, i);
+					} else {
+						offset = this.MoveOffset(points[4], points[6], p, 0, i);
+					}
+					this.WriteIcon(this.dps, offset, '远2');
+					if (this.time > 120 && this.time < 155) {
+						if (i == 2) {
+							this.WriteCircle(this.SetOffset(points[3], 0, i), "rgba(25,135,84,0.6)", 40);
+						} else {
+							this.WriteCircle(this.SetOffset(points[4], 0, i), "rgba(25,135,84,0.6)", 40);
+						}
+					}
+				});
+				break;
+			}
+			case this.time < 175: {
+				let p = this.perSent(165, 10);
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 0) {
+						offset = this.MoveOffset(points[6], points[4], p, 0, i);
+					} else if (i == 1) {
+						offset = this.MoveOffset(points[6], points[7], p, 0, i);
+					} else {
+						offset = this.MoveOffset(points[5], points[3], p, 0, i);
+					}
+					this.WriteIcon(this.dps, offset, '远2');
+				});
+				break;
+			}
+			default: {
+				this.Each(null, null, i => {
+					let offset;
+					if (i == 0) {
+						offset = this.SetOffset(points[4], 0, i);
+					} else if (i == 1) {
+						offset = this.SetOffset(points[7], 0, i);
+					} else {
+						offset = this.SetOffset(points[3], 0, i);
+					}
+					this.WriteIcon(this.dps, offset, '远2');
+					if (this.time >= 180) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+			}
+
+		}
+	}
+	drawHeal() {
+		//治疗
+		let points = [
+			[195, 57], //0
+
+			[135, 83],//近左 1
+			[190, 83],//近右 2
+
+
+			[100, 100],//远左 3
+			[222, 72],//远右 4
+
+			[188, 93], //5
+
+			[130, 60],// 6 左上
+			[104, 76],// 7 左左
+			[217, 72],//远右上 8
+
+
+		];
+		switch (true) {
+			case this.time <= 40: {
+				this.Each((i, j) => {
+					let offset = this.SetOffset(points[0], j, i);
+					this.WriteIcon(this.heal, offset);
+					if (this.time < 20) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+			}
+			case this.time < 160: {
+				let p = this.perSent(50, 10);
+				this.Each((i, j) => {
+					let offset;
+					if (i == 2) {
+						offset = this.MoveOffset(points[0], points[1], p, j, i);
+					} else {
+						offset = this.MoveOffset(points[0], points[2], p, j, i);
+					}
+					this.WriteIcon(this.heal, offset);
+				});
+				break;
+			}
+			case this.time < 175: {
+				let p = this.perSent(165, 10);
+				this.Each((i, j) => {
+					let offset;
+					if (i == 0) {
+						offset = this.MoveOffset(points[2], points[6], p, j, i);
+					} else if (i == 1) {
+						offset = this.MoveOffset(points[2], points[7], p, j, i);
+					} else {
+						offset = this.MoveOffset(points[1], points[8], p, j, i);
+					}
+					this.WriteIcon(this.heal, offset);
+				});
+				break;
+			}
+			default: {
+				this.Each((i,j) => {
+					let offset;
+					if (i == 0) {
+						offset = this.SetOffset(points[6], j, i);
+					} else if (i == 1) {
+						offset = this.SetOffset(points[7], j, i);
+					} else {
+						offset = this.SetOffset(points[8], j, i);
+					}
+					this.WriteIcon(this.heal, offset);
+					if (this.time >= 180) {
+						//紫圈
+						this.WriteCircle(offset, "rgba(206,0,225,0.5)", 60);
+					}
+				});
+				break;
+
+			}
+		}
+	}
 }

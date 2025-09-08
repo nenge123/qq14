@@ -77,6 +77,9 @@ new class {
 				 */
 				const newelm = response.body.firstElementChild;
 				$(newelm).attr('page-href',page);
+				if(newelm.hasAttribute('uk-modal')){
+					return  N.UIKIT_Modal(newelm,elm);
+				}
 				if(newelm.classList.contains('modal')){
 					return  N.showModal(newelm,elm);
 				}
@@ -140,6 +143,20 @@ new class {
 		elm.addEventListener('click', function () {
 			jQuery(newelm).modal('show');
 		});
+		this.parse(newelm);
+	}
+	UIKIT_Modal(newelm,elm){
+		document.body.appendChild(newelm);
+		UIkit.util.on(newelm, 'show', function () {
+			localStorage.setItem('base-page', elm.getAttribute('data-page'));
+		});
+		UIkit.util.on(newelm, 'hide', function () {
+			const page = localStorage.getItem('base-page');
+			if(page&&page==$(newelm).attr('page-href')){
+				localStorage.removeItem('base-page');
+			}
+		});
+		UIkit.modal(newelm).show();
 		this.parse(newelm);
 
 	}

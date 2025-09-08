@@ -27,3 +27,6 @@ img.icons{
     word-break: keep-all;
     white-space: nowrap;
 }
+.no-p p{
+	margin: 1px auto;
+}
