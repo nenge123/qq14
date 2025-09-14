@@ -19,24 +19,30 @@ self.addEventListener('fetch',function(event){
 		switch(true){
 			case /themes\//.test(url.pathname):
 			case /pages\/.+\.webp$/.test(url.pathname):
-				return event.respondWith(BaseResponse(request, 'qq14-themes'));
+				return event.respondWith(BaseResponse(request, 'qq14-themes',true));
 			break;
 		}
 	}else{
-
+		switch(true){
+			case /cdn/.test(url.origin):{
+				return event.respondWith(BaseResponse(request, 'qq14-cdn',false));
+			}
+		}
 	}
 
 });
 
-async function BaseResponse(request, cachename) {
+async function BaseResponse(request, cachename,bool) {
 	const cache = await caches.open(cachename);
 	const response = await cache.match(request);
 	if (response instanceof Response) {
 		return response;
 	}
-	const newResponse = await fetch(request, { headers:{'cache-control':'no-cache'}});
-	if ((newResponse instanceof Response)&& newResponse.status == 200) {
+	const newResponse = await fetch(request, { headers:bool?{'cache-control':'no-cache'}:{}});
+	if ((newResponse instanceof Response)&& (newResponse.status == 200 || newResponse.type=='opaque')) {
 		cache.put(request, newResponse.clone());
+	}else{
+		console.log(newResponse,request);
 	}
 	return newResponse || new Response(undefined, { status: 404, statusText: 'not found' });
 }

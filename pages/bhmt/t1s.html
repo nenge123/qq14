@@ -6,35 +6,8 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body" style="padding: .25rem;">
-				<p><a href="https://www.bilibili.com/video/BV1gV3uzREEF/" target="_blank">B站原视频地址</a></p>
-				<p>●企划：子言姐姐</p>
-				<p>●文案：子言姐姐</p>
-				<p> ●视频制作：子言F 子言M</p>
-				<p>●制作协力：顾跑跑 菓子君 素素 青瓜 Waffle Tiger 狗蛋</p>
-				<p>●参演：子言姐姐 顾跑跑 菓子君 素素 青瓜 Waffle Tiger 狗蛋</p>
-				<p>●鸣谢：狗蛋 Tiger</p>
-				<p> 子言姐姐</p>
-				<p> 2025.7.3</p>
-				<h3>BOSS常规技能</h3>
+				<h3>BOSS点名技能</h3>
 				<div class="accordion" id="accordionExample">
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> 甩头攻击 </button>
-						</h2>
-						<div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-							<div class="accordion-body">前方范围攻击 <img src="/pages/bhmt/t1s1.webp" width="100%">
-							</div>
-						</div>
-					</div>
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> 甩尾攻击 </button>
-						</h2>
-						<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-							<div class="accordion-body">后方范围攻击 <img src="/pages/bhmt/t1s2.webp" width="100%">
-							</div>
-						</div>
-					</div>
 					<div class="accordion-item">
 						<h2 class="accordion-header">
 							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"> 致死毒孢 </button>
@@ -60,43 +33,95 @@
 					<table class="table table-striped no-p" style="font-size: .875rem;">
 						<thead>
 							<tr>
-								<th scope="col">技能</th>
+								<th scope="col">技能轴</th>
 								<th scope="col">说明</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td class="text-keep">P1阶段</td>
-								<td>MT嘲讽开怪<br>冲到到BOSS<br>让BOSS背对人群<br>BOSS基本上固定在这个位置<br>无需多动症到处拉!<div data-app="/pages/bhmt/t1s_skill_p1.js"></div>
+								<td>
+									<p>MT嘲讽开怪,待BOSS到达三角位置,冲锋到BOSS,BOSS背对人群,BOSS基本上固定在这个位置,因此无需多动症到处拉!</p>
+									<div data-app="/pages/bhmt/t1s_skill_p1.js"></div>
 								</td>
 							</tr>
 							<tr>
-								<td class="text-keep">甩头攻击<br>甩尾攻击<br>钢鳞<br>防卫反应启动</td>
-								<td>BOSS甩头,MT穿过BOSS,与人群一起<br>甩尾结束,MT穿过BOSS,远离人群 <div data-app="/pages/bhmt/t1s_skill_p2.js"></div>
+								<td class="text-keep">
+									<p>甩头攻击</p>
+									<p>甩尾攻击</p>
+									<p>钢鳞</p>
+									<p>防卫反应启动</p>
+								</td>
+								<td>
+									<p>BOSS<b style="color:blue">甩头</b>,MT<b style="color:blue">穿过BOSS</b>,BOSS<b style="color:blue">甩尾</b>,MT穿过BOSS与人群一起,MT<b style="color:blue">致死毒泡</b></p>
+									<div data-app="/pages/bhmt/t1s_skill_p2.js"></div>
 								</td>
 							</tr>
 							<tr>
-								<td class="text-keep">致死毒孢<br>防卫反应启动<br>甩头攻击<br>喷毒<br>甩尾攻击<br><b style="color:blue">防卫反应判定</b><br><b style="color:blue">防卫反应判定</b></td>
-								<td>MT被标记开减伤<br>拖动BOSS移动到安全的石板(方便近战输出)<br>BOSS甩头,MT穿过BOSS,与人群一起<br>直至防卫判定(石板发光结束)转移安全石板 <div data-app="/pages/bhmt/t1s_skill_p3.js"></div>
+								<td class="text-keep">
+									<p>致死毒孢</p>
+									<p>防卫反应启动</p>
+									<p>甩头攻击</p>
+									<p>喷毒</p>
+									<p>甩尾攻击</p>
+									<p><b style="color:blue">防卫反应判定</b></p>
+									<p><b style="color:blue">防卫反应判定</b></p>
+								</td>
+								<td>
+									<p>MT<b style="color:blue">致死毒泡</b>,BOSS<b style="color:blue">甩头</b>,MT穿过BOSS与人群一起,直至防卫判定,转移停止发光石板</p>
+									<div data-app="/pages/bhmt/t1s_skill_p3.js"></div>
 								</td>
 							</tr>
 							<tr>
-								<td class="text-keep">钢鳞<br>防卫反应启动<br>致死毒孢<br>防卫反应启动<br>钢鳞<br>喷毒<br>甩尾攻击<br><b style="color:blue">防卫反应判定</b><br><b style="color:blue">防卫反应判定</b></td>
-								<td>MT被标记开减伤(远离人群).<br>死刑(致死毒孢)结束后<br>MT与人群站在一起<br>直至防卫反应判定<br>人群转移石板,MT远离人群<br><b style="color:blue">若第一次判断时,血量低于等于71%可以无需喂蛇!</b>
+								<td class="text-keep">
+									<p>钢鳞</p>
+									<p>防卫反应启动</p>
+									<p>致死毒孢</p>
+									<p>防卫反应启动</p>
+									<p>钢鳞</p>
+									<p>喷毒</p>
+									<p>甩尾攻击</p>
+									<p><b style="color:blue">防卫反应判定</b></p>
+									<p><b style="color:blue">防卫反应判定</b></p>
+								</td>
+								<td>
+									<p>MT<b style="color:blue">致死毒泡</b>.致死毒孢结束后MT与人群站在一起,直至防卫反应判定,人群转移石板!</p>
+									<p style="background-color: blue;color: #fff;display: inline-block;">高装等(145+,或爆发药加持),石板判定的时候BOSS低于72%血量,可以无需喂蛇人.</p>
 									<div data-app="/pages/bhmt/t1s_skill_p4.js"></div>
 								</td>
 							</tr>
 							<tr>
-								<td class="text-keep">致死毒孢<br>钢鳞<br>防卫反应启动<br>防卫反应启动<br>防卫反应判定<br>防卫反应判定<br>钢鳞<br><b style="color:red">散伙</br></td>
-								<td>MT被标记开减伤<br><b>防卫反应判定</b>前没能压血到68%转阶段<br>建议优化输出选手<br>因为没必要继续打下去.</td>
+								<td class="text-keep">
+									<p>致死毒孢</p>
+									<p>钢鳞</p>
+									<p>防卫反应启动</p>
+									<p>防卫反应启动</p>
+									<p>防卫反应判定</p>
+									<p>防卫反应判定</p>
+									<p>钢鳞</p>
+									<p style="background-color: red;color: #fff;display: inline-block;">散伙</p>
+								</td>
+								<td>
+									<p>MT致死毒孢远离人群.</p>
+									<hr>
+									<p style="background-color: blue;color: #fff;display: inline-block;">若血量没压到69%且前面任意阶段没喂蛇,钢鳞会使BOSS进入狂暴状态,普攻秒杀任何单位.</p>
+									<hr>
+									<p style="background-color: red;color: #fff;display: inline-block;">如果石板判定时,仍旧没能压血到68%转阶段,若非喂蛇过多,建议优化输出选手,因为没必要继续打下去.</p>
+								</td>
 							</tr>
 							<tr>
 								<td class="text-keep">P2阶段</td>
 								<td>HP降至68%,BOSS回到正中间转阶段</td>
 							</tr>
 							<tr>
-								<td class="text-keep">分裂<br>凝视</td>
-								<td>BOSS短暂居中<br>队员立即分组前往各自区域<br><b style="color:red">眼神队可以转移过程中路过多砍BOSS几下</b><br>BOSS不可攻击的时,分组队友必须到位.<br>期间发现缺人,多人及时提醒<b style="color:red">猪队友</b>
+								<td class="text-keep">
+									<p>分裂</p>
+									<p>凝视</p>
+									<p>毒液喷发(预)</p>
+								</td>
+								<td>
+									<p> BOSS短暂居中,1357/2468顺位队友立即分组前往各自区域, <b style="color:red">眼神队可以转移过程中路过多砍BOSS几下.</b>,BOSS不可攻击的时,分组队友必须到位,期间发现缺人,多人及时提醒<b style="color:red">冒失鬼队友</b>
+									</p>
 									<div data-app="/pages/bhmt/t1s_skill_p5.js"></div>
 								</td>
 							</tr>
@@ -117,16 +142,9 @@
 									<p>毒液喷发</p>
 								</td>
 								<td>
-									<p>分别站BOSS四方保持输出</p>
-									<p>毒标点名队友远离放毒(图中仅供参考)</p>
-									<p style="color:blue">喂蛇人记住第二次p石板发光地</p>
-									<p style="color:blue">治疗在第一个毒标结束,锁定坦克加血</p>
-									<p style="color:red">坦克被标记开两层减伤</p>
-									<p>毒标点名队友远离放毒</p>
-									<p>分组队员集合等待分摊伤害</p>
-									<p>分摊结束,喂蛇人留下或者转移最中间两块石板(第二亮石板)</p>
-									<p>其他人转移不发光石板并分散一个石板的对角(治疗和近战DPS)</p>
-									<p>紫圈预警,分散站位,期间不要踩到还在发光石板(图二)</p>
+									<p>BOSS四方保持输出(不会重叠到人物),<b style="color:red">毒标点名队友</b>远离BOSS放毒(图中仅供参考)</p>
+									<p style="color:blue">喂蛇人记住第二次p石板发光地(特别图B的情况)</p>
+									<p>紫圈预警,分散站位,期间不要踩到发光石板(图B)</p>
 									<div data-app="/pages/bhmt/t1s_skill_p6.js"></div>
 								</td>
 							</tr>
@@ -150,6 +168,8 @@
 									<p>全屏击退</p>
 								</td>
 								<td>
+									<p>坦克可以根据近战位置调整头尾夹击朝向</p>
+									<div data-app="/pages/bhmt/t1s_skill_p7.js"></div>
 									<p style="color:blue">紫圈结束后,以坦克为参考,站到BOSS腰间输出<br>有毒标就离开排放,但不要放到地图中心区域!!</br>可以磕爆发药.</p>
 									<p>BOSS脚下范围预警,近战立即离开BOSS.</p>
 									<p>BOSS消失,分组队友集合到消失点.</p>
@@ -171,7 +191,19 @@
 								<td></td>
 							</tr>
 							<tr>
-								<td class="text-keep">凝视<br>毒液分摊<br>毒液喷发<br>头尾夹击<br>喷毒<br>防卫反应判定<br>头尾夹击<br>毒液分摊<br>防卫反应判定<br>头尾夹击<br>防卫反应判定</td>
+								<td class="text-keep">
+									<p>凝视</p>
+									<p>毒液分摊</p>
+									<p>毒液喷发</p>
+									<p>头尾夹击</p>
+									<p>喷毒</p>
+									<p>防卫反应判定</p>
+									<p>头尾夹击</p>
+									<p>毒液分摊</p>
+									<p>防卫反应判定</p>
+									<p>头尾夹击</p>
+									<p>防卫反应判定</p>
+								</td>
 								<td>坦克可以静待第一次头尾夹击结束,再调整BOSS位置,要要预留给放毒人回来的通道.<br><b style="color:red">外围后亮:可以把BOSS横放,贴心一点可以往底部拉一点后再横放,预留更多空间.提高容错!</b><br><b style="color:blue">外围先亮:头尾夹击预警的瞬间,立即到右侧石板的悬崖边缘.适当调增朝向,一般竖放.</b><br>有毒标就离开排放并回到治疗身边<br>治疗要跟随BOSS站到腰间<br>头尾夹击,坦克与治疗集合<br>分摊结束,除了喂蛇人,其他人前往安全的石板<br><b style="color:blue">由于会再次头尾夹击(蛇在右侧石板)<br>治疗可以站到最中央石板上的边缘<br>等右侧炸了立即回去,避免前往最外围石板的头尾夹击被打死.坦克前往外围石板也要给自己预留夹角空间!</b><br><br>
 									<img src="/pages/bhmt//t1s17.webp"><br>
 									<img src="/pages/bhmt//t1s18.webp"><br>
@@ -179,7 +211,29 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="text-keep">头尾夹击<br>喷毒<br>致死毒孢<br>喷毒<br>钢鳞<br>头尾合击<br>毒液分摊<br>喷毒<br>喷毒<br>移形换位<br>凝视<br>毒液喷发<br>致死毒孢<br>头尾合击<br>喷毒<br>头尾合击<br>毒液分摊<br>喷毒<br>喷毒<br>循环...<br>防卫反应启动<br><br><b style="color:blue">狂暴灭团</b></td>
+								<td class="text-keep">
+									<p>头尾夹击</p>
+									<p>喷毒</p>
+									<p>致死毒孢</p>
+									<p>喷毒</p>
+									<p>钢鳞</p>
+									<p>头尾夹击</p>
+									<p>毒液分摊</p>
+									<p>喷毒</p>
+									<p>喷毒</p>
+									<p>移形换位</p>
+									<p>凝视</p>
+									<p>毒液喷发</p>
+									<p>致死毒孢</p>
+									<p>头尾夹击</p>
+									<p>喷毒</p>
+									<p>头尾夹击</p>
+									<p>毒液分摊</p>
+									<p>喷毒</p>
+									<p>喷毒</p>
+									<p>防卫反应启动</p>
+									<p>防卫反应判定</p>
+									<p><b style="color:blue">狂暴灭团</b></td>
 								<td>在经历上一次的夹击(地图已没有发光石板)<br>坦克横放BOSS<br>近战输出和治疗站BOSS夹角的绝对安全空间<br>直至分身死亡或者团灭.<br>期间会喷毒点名和移形换位<br>可以让远程输出稍微站远一点引导毒液点名 </td>
 							</tr>
 						</tbody>
@@ -187,7 +241,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<p style="flex-grow: 1;"><a href="https://www.bilibili.com/video/BV1gV3uzREEF/" target="_blank">B站原视频地址</a></p>
+				<p style="flex-grow: 1;"><a href="https://www.bilibili.com/video/BV1gV3uzREEF/" target="_blank">B站原视频地址</a>(子言姐姐攻略视频解说)</p>
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
 			</div>
 		</div>
