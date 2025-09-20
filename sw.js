@@ -17,13 +17,17 @@ self.addEventListener('fetch',function(event){
 		const pathname = url.pathname.replace(location.pathname,'');
 		//本域
 		switch(true){
-			case /themes\//.test(url.pathname):
+			//case /themes\//.test(url.pathname):
 			case /pages\/.+\.webp$/.test(url.pathname):
 				return event.respondWith(BaseResponse(request, 'qq14-themes',true));
 			break;
 		}
 	}else{
 		switch(true){
+			case /unpkg\.com/.test(url.origin):{
+				if(ext!='zip')return event.respondWith(BaseResponse(request, 'qq14-cdn',false));
+				break;
+			}
 			case /cdn/.test(url.origin):{
 				return event.respondWith(BaseResponse(request, 'qq14-cdn',false));
 			}
@@ -38,7 +42,7 @@ async function BaseResponse(request, cachename,bool) {
 	if (response instanceof Response) {
 		return response;
 	}
-	const newResponse = await fetch(request, { headers:bool?{'cache-control':'no-cache'}:{}});
+	const newResponse = await fetch(request, { headers:bool?{'cache-control':'no-cache'}:{}}).catch(e=>undefined);
 	if ((newResponse instanceof Response)&& (newResponse.status == 200 || newResponse.type=='opaque')) {
 		cache.put(request, newResponse.clone());
 	}else{

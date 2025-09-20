@@ -24,13 +24,14 @@ export default class t1s extends base {
 		this.canvas.width = this.bg.width * 2 + 5;
 		this.canvas.height = this.bg.height * 3 + 10;
 		this.ctx = this.canvas.getContext('2d');
+		this.CreatFloor();
 		this.time = 1;
 		this.runLoop();
 	}
 	loop() {
 		const ctx = this.ctx;
 		this.WriteBg(3, 2);
-		this.drawFloor();
+		this.loopFloor(0.5);
 		this.drawText();
 		this.drawBOSS();
 		this.drawHeal();
@@ -38,15 +39,15 @@ export default class t1s extends base {
 		this.drawDPS1();
 		this.drawDPS2();
 		this.drawDPS3();
-		if(this.time>150&&this.time<170){
-			this.Each((i,j)=>{
+		if (this.time > 150 && this.time < 170) {
+			this.Each((i, j) => {
 				let offset;
-				if(i==2){
-					offset = this.SetOffset([140,96],j,i);
-				}else{
-					offset = this.SetOffset([185,96],j,i);
+				if (i == 2) {
+					offset = this.SetOffset([140, 96], j, i);
+				} else {
+					offset = this.SetOffset([185, 96], j, i);
 				}
-				this.WriteShareDGM(offset,1);
+				this.WriteShareDGM(offset, 1);
 			});
 		}
 		this.time += 1;
@@ -62,39 +63,54 @@ export default class t1s extends base {
 		this.WriteBigText([30, 35 + this.bg.height], 'B注意石板顺序');
 		this.WriteBigText([30, 40 + this.bg.height * 2], 'C');
 	}
-	drawFloor() {
-		let opt = 0.5;
-		const floor = [
-			[],
-			[130, 88.5],
-			[163, 144],
-			[195, 88.5],
-			[227.5, 32.5],
-			[98, 32.5],
-			[163, 32.5]
-		];
-		let map = [
-			[[30, 150], [1, 2], [1, 2], [3, 4, 5, 6]],
-			[[70, 180], [3, 4], [5, 6], [1, 2]],
-			[[100, 190], [5, 6], [3, 4], []]
-		];
-		for (const points of map) {
-			const time = points.shift();
-			if (this.time >= time[0] && this.time < time[1]) {
-				let p = this.perSent(time[0], 10);
-				for (let i = 0; i < 2; i++) {
-					for (let q = 0; q < points.length; q++) {
-						const points2 = points[q];
-						for (let pos of points2) {
-							let [x, y] = floor[pos];
-							this.WriteSix(this.SetOffset([x, y], i, q), p * opt);
-						}
-					}
+	CreatFloor() {
+		this.setFloorStart([33, 33]);
+		this.floorTime = [
+			[
+				[30, 150], //时间轴
+				this.setFloorPoint(
+					[
+						[2, 0, [0, 2], [0, 2]],
+						[3, 0, [0, 2], [0, 2]],
+		
+						[2, 1, [0, 2], 2],
+						[1, 3, [0, 2], 2],
+						[1, 2, [0, 2], 2],
+						[1, 1, [0, 2], 2],
 
-				}
+					]
+				)
+			],
+			[
+				[70, 180],
+				this.setFloorPoint(
+					[
+						[1, 3, [0, 2], 0],
+						[2, 1, [0, 2], 0],
+		
+						[1, 1, [0, 2], 1],
+						[1, 2, [0, 2], 1],
+		
+						[2, 0, [0, 2], 2],
+						[3, 0, [0, 2], 2]
 
-			}
-		}
+					]
+				)
+			],
+			[
+				[100, 190],
+				this.setFloorPoint(
+					[
+						[1, 1, [0, 2], 0],
+						[1, 2, [0, 2], 0],
+		
+						[1, 3, [0, 2], 1],
+						[2, 1, [0, 2], 1],
+
+					]
+				)
+			]
+		];
 
 	}
 	drawBOSS() {
@@ -709,7 +725,7 @@ export default class t1s extends base {
 				break;
 			}
 			default: {
-				this.Each((i,j) => {
+				this.Each((i, j) => {
 					let offset;
 					if (i == 0) {
 						offset = this.SetOffset(points[6], j, i);

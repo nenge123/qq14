@@ -21,27 +21,30 @@ export default class t1s extends base {
 		this.def_4 = await fetchImage('/images/EffectsGood/210256.webp', { resizeWidth: 32 });
 		this.def_5 = await fetchImage('/images/EffectsGood/210152.webp', { resizeWidth: 32 });
 
+		this.changeAtk = await fetchImage('/images/skill/000803.webp', { resizeWidth: 32 });
+		this.lb = await fetchImage('/images/skill/lb.webp', { resizeWidth: 32 });
+
 		this.canvas.width = this.bg.width * 2 + 5;
 		this.canvas.height = this.bg.height;
 		this.ctx = this.canvas.getContext('2d');
 		this.time = 1;
+		this.CreatFloor();
 		this.runLoop();
 	}
 	loop() {
 		const ctx = this.ctx;
 		this.WriteBg(1, 2);
+		this.loopFloor(0.5);
+		this.drawBOSS();
+		this.drawTank();
+		this.drawDPS1();
+		this.drawDPS2();
+		this.drawHeal();
+		this.drawText();
 		this.time += 1;
-		if (this.time > 250) {
+		if (this.time > 300) {
 			this.time = 1;
 		}
-	}
-	//初始固定位置
-	boos_1 = [197, 87];
-	boos_2 = [163, 108];
-	WriteTips(text) {
-		this.WriteBigText([30, 30], 'A' + text);
-		this.WriteBigText([30, 35 + this.bg.height], 'B注意石板顺序');
-		this.WriteBigText([30, 40 + this.bg.height * 2], 'C');
 	}
 	drawFloor() {
 		let opt = 0.5;
@@ -79,82 +82,562 @@ export default class t1s extends base {
 
 	}
 	drawBOSS() {
-		const boos_1 = [197, 87];
-		const boos_2 = [163, 108];
+		const points = [163, 108];
 		if (this.time <= 40) {
-			this.Each((i, j) => this.WriteIcon(this.boss, this.SetOffset(boos_1, j, i)));
-		} else if (this.time <= 50) {
-			let p = this.perSent(40, 10);
-			this.Each((i, j) => {
-				const offset = this.MoveOffset(boos_1, boos_2, p, j, i);
+			this.Each(null, j =>{
+				let offset = this.SetOffset(points, j, 0);
+				if(this.time<=20){
+					//头尾夹击
+					this.WriteHalfCircle(offset,'rgba(255,193,7,0.8)',60,135);
+					this.WriteHalfCircle(offset,'rgba(255,193,7,0.8)',60,-45);
+				}
 				this.WriteIcon(this.boss, offset);
 			});
+
+		} else if (this.time <= 60) {
+			this.Each(null, j => {
+				let offset = this.SetOffset(points, j, 0);
+				if (this.time % 2 == 0) {
+					//以形换位
+					this.WriteIcon(this.boss, offset);
+				}
+				this.WriteCircle(offset, 'rgba(219,200,145,0.5)', 60);
+				this.WriteOutDGM(offset);
+			});
+		} else if (this.time <= 80) {
+			//凝视
+			this.Each(null, j => {
+				let offset = this.SetOffset(points, j, 0);
+				this.WriteIcon(this.boss, offset);
+				this.WriteCircle(offset, 'rgba(0,128,0,0.5)', 60);
+			});
 		} else {
-			this.Each((i, j) => this.WriteIcon(this.boss, this.SetOffset(boos_2, j, i)));
+			this.Each(null, j => {
+				let offset = this.SetOffset(points, j, 0);
+				if(this.time<=200&&this.time>180){
+					//头尾夹击
+					this.WriteHalfCircle(offset,'rgba(255,193,7,0.8)',60,135);
+					this.WriteHalfCircle(offset,'rgba(255,193,7,0.8)',60,-45);
+				}
+				if(this.time<=220){
+					this.WriteIcon(this.boss, offset);
+				}else{
+					let offset2 = this.SetOffset([145,4], j, 0);
+					this.WriteIcon(this.boss, offset2);
+				}
+			});
 		}
+	}
+	
+	CreatFloor() {
+		this.setFloorStart([33, 33]);
+		this.floorTime = [
+			[
+				[120, 999], //时间轴
+				this.setFloorPoint(
+					[
+						[2, 0,0,0],
+						[3, 0,0,0],
+		
+						[2, 1,1,0],
+						[1, 3,1,0],
+						[1, 2,1,0],
+						[1, 1,1,0],
+
+					]
+				)
+			],
+			[
+				[160, 999],
+				this.setFloorPoint(
+					[
+						[1, 3, [0, 2], 0],
+						[2, 1, [0, 2], 0],
+		
+						[1, 1, [0, 2], 1],
+						[1, 2, [0, 2], 1],
+		
+						[2, 0, [0, 2], 2],
+						[3, 0, [0, 2], 2]
+
+					]
+				)
+			],
+		];
+
+	}
+	drawTank(){
+		let points = [
+			[163, 137],
+			[184,103],
+			[165,167],
+		];
+		const pos = [[0,2],0];
+		this.loopIcon(
+			this.tank,
+			[
+				[
+					//头尾夹击
+					[0,0],
+					points[0],
+					pos,
+				],
+				[
+					//头尾夹击
+					[10,5],
+					points[1],
+					pos,
+				],
+				[
+					//归位
+					[25,5],
+					points[0],
+					pos,
+				],
+				[
+					//以形换位
+					[40,5],
+					points[2],
+					pos,
+				],
+				[
+					//凝视 需要嘲讽
+					[60,5],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						if(this.time<=80){
+							let [x,y] = endOffset;
+							this.WriteIcon(this.changeAtk,[x+25,y],'嘲讽');
+						}
+					}],
+				],
+				[
+					//毒液喷发
+					[80],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+					}],
+				],
+				[
+					//致死毒孢
+					[100],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						if(this.time%2==0){
+							this.WriteCircle(endOffset, "rgba(206,0,225,1)", 25);
+						}
+					}],
+					'致死毒孢'
+				],
+				[
+					//无
+					[120],
+					points[0],
+					pos
+				],
+				[
+					//头尾夹击
+					[180,5],
+					points[1],
+					pos
+				],
+				[
+					//头尾夹击-归位
+					[200,5],
+					points[0],
+					pos
+				],
+				[
+					//头尾夹击-归位
+					[220,5],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+					}],
+				],
+			]
+		);
+	}
+	drawDPS1(){
+		let points = [
+			[184, 96],
+			[221,73],
+			[203,72],
+			[164,13],
+		];
+		const pos = [[0,2],0];
+		const text = '近';
+		this.loopIcon(
+			this.dps,
+			[
+				[
+					//头尾夹击
+					[0,0],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//头尾夹击
+					[19,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒点名
+					[25,5],
+					points[1],
+					pos,
+					[(endOffset)=>{
+						if(this.time%2==0){
+							this.WriteCircle(endOffset, "rgba(25,135,84," + 0.6 + ")", 40);
+						}
+					}],
+					text
+				],
+				[
+					//毒点名
+					[30,5],
+					points[0],
+					pos,
+					[(endOffset,l,k)=>{
+						let offset = this.SetOffset(points[1],l,k);
+						this.WriteCircle(offset, "rgba(25,135,84," +  0.6 + ")", 40);
+					}],
+					text
+				],
+				[
+					//以形换位
+					[40,5],
+					points[2],
+					pos,
+					[(endOffset,l,k)=>{
+						if(this,this.time<50){
+							let offset = this.SetOffset(points[1],l,k);
+							this.WriteCircle(offset, "rgba(25,135,84," +  0.6 + ")", 40);
+						}
+					}],
+					text
+				],
+				[
+					//凝视 需要嘲讽
+					[60,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒液喷发
+					[80],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+					}],
+					text
+				],
+				[
+					//致死毒孢
+					[100],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//无
+					[120],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//头尾夹击
+					[180,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒
+					[200,5],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						if(this.time%2==0){
+							this.WriteCircle(endOffset, "rgba(25,135,84," + 0.6 + ")", 40);
+						}
+					}],
+					text
+				],
+				[
+					//毒
+					[215,5],
+					points[2],
+					pos,
+					[(endOffset,l,k)=>{
+						let offset = this.SetOffset(points[0],l,k);
+						this.WriteCircle(offset, "rgba(25,135,84," +  0.6 + ")", 40);
+					}],
+					text
+				],
+				[
+					//头尾夹击-归位
+					[220,5],
+					points[3],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+						const [x,y] = endOffset;
+						this.WriteIcon(this.lb,[x+25,y],'龙骑二段极限技');
+					}],
+					text
+				],
+			]
+		);
+	}
+	drawDPS2(){
+		let points = [
+			[140, 96],
+			[103,96],
+			[119,80],
+		];
+		const pos = [[0,2],0];
+		const text = '远';
+		this.loopIcon(
+			this.dps,
+			[
+				[
+					//头尾夹击
+					[0,0],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//头尾夹击
+					[19,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒点名
+					[25,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒点名
+					[30,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//以形换位
+					[40,5],
+					points[2],
+					pos,
+					text
+				],
+				[
+					//凝视 需要嘲讽
+					[60,5],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒液喷发
+					[80],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+					}],
+					text
+				],
+				[
+					//致死毒孢
+					[100],
+					points[0],
+					pos,
+					null,
+					text
+				],
+				[
+					//毒点名
+					[145,5],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						if(this.time%2==0){
+							this.WriteCircle(endOffset, "rgba(25,135,84," + 0.6 + ")", 40);
+						}
+					}],
+					text
+				],
+				[
+					//毒点名
+					[150,5],
+					points[2],
+					pos,
+					[(endOffset,l,k)=>{
+						if(this.time<170){
+							let offset = this.SetOffset(points[0],l,k);
+							this.WriteCircle(offset, "rgba(25,135,84," +  0.6 + ")", 40);
+						}
+					}],
+					text
+				],
+				[
+					//头尾夹击
+					[180,5],
+					points[2],
+					pos,
+					null,
+					text
+				],
+				[
+					//头尾夹击-归位
+					[200,5],
+					points[2],
+					pos,
+					null,
+					text
+				],
+				[
+					//头尾夹击-归位
+					[220,5],
+					points[2],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+					}],
+					text
+				],
+			]
+		);
+	}
+	drawHeal(){
+		let points = [
+			[163,48],
+			[163,86],
+		];
+		const pos = [[0,2],0];
+		this.loopIcon(
+			this.heal,
+			[
+				[
+					//头尾夹击
+					[0,0],
+					points[0],
+					pos,
+				],
+				[
+					//以形换位
+					[59,0],
+					points[0],
+					pos,
+				],
+				[
+					//凝视 需要嘲讽
+					[60,5],
+					points[1],
+					pos,
+				],
+				[
+					//毒液喷发
+					[80,5],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						if(this.time<100){
+							//紫圈
+							this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+						}
+					}],
+				],
+				[
+					//头尾夹击-归位
+					[220,5],
+					points[0],
+					pos,
+					[(endOffset)=>{
+						//紫圈
+						this.WriteCircle(endOffset, "rgba(206,0,225,0.5)", 60);
+					}],
+				],
+			]
+		);
 	}
 	drawText() {
 		switch (true) {
-			case this.time < 20:
-				this.WriteTips('紫圈');
-				break;
-
-			case this.time < 40:
-				//20-40
-				this.WriteTips('第一次地板');
-				break;
-			case this.time < 60:
+			case this.time <20:
+				this.WriteBigText([30, 30], '头尾夹击');
+			break;
+			case this.time <40:
+				this.WriteBigText([30, 30], '喷毒');
+			break;
+			case this.time <60:
 				//40-60
-				this.WriteTips('喷毒');
-				break;
-			case this.time < 80:
+				this.WriteBigText([30, 30], '以形换位');
+			break;
+			case this.time <80:
 				//60-80
-				this.WriteTips('第二次地板');
-				break;
-			case this.time < 100:
-				this.WriteTips('致死毒泡 减伤');
-				for (let i = 1; i <= 4; i++) {
-					const icon = this['def_' + i];
-					let [x, y] = [0, 0];
-					if (i == 2 || i == 4) {
-						y += 35;
-					} else {
-						x += 35
-					}
-					this.ctx.drawImage(
-						icon,
-						(i - 1) * 32 + this.bg.width - 20,
-						0
-					);
-				}
-				this.ctx.fillStyle = "red";
-				this.ctx.font = 'bold 32px serif';
-				this.ctx.fillText('紧急减伤', this.bg.width - 40, 64);
-				this.ctx.font = 'bold 14px serif';
-				this.ctx.drawImage(
-					this.def_5,
-					this.bg.width + 100,
-					32
-				);
-				break;
-			case this.time < 120:
-				this.WriteTips('第三次地板');
-				break;
-			case this.time < 140:
-				//120-140
-				this.WriteTips('喷毒');
-				break;
-			case this.time < 160:
-				//140 - 160
-				this.WriteTips('分摊');
-				break;
-			case this.time < 180:
-				//160-180
-				this.WriteTips('喂蛇');
-				break;
-			case this.time < 200:
-				this.WriteTips('毒液喷发(不要踩发光地板)');
-				break;
+				this.WriteBigText([30, 30], '凝视');
+			break;
+			case this.time <100:
+				//80-100
+				this.WriteBigText([30, 30], '毒液喷发');
+			break;
+			case this.time <120:
+				//100-120
+				this.WriteBigText([30, 30], '致死毒孢');
+			break;
+			case this.time <140:
+				this.WriteBigText([30, 30], '防卫反应启动');
+			break;
+			case this.time <160:
+				this.WriteBigText([30, 30], '喷毒');
+			break;
+			case this.time <180:
+				this.WriteBigText([30, 30], '防卫反应启动');
+			break;
+			case this.time <200:
+				//180
+				this.WriteBigText([30, 30], '头尾夹击');
+			break;
+			case this.time <220:
+				this.WriteBigText([30, 30], '喷毒');
+			break;
+			case this.time <240:
+				this.WriteBigText([30, 30], '合体+毒液喷发');
+			break;
 		}
 	}
 }

@@ -151,6 +151,7 @@ export default class base {
 		ctx.closePath();
 		ctx.fill();
 	}
+
 	WriteFT(xy, opt, rWidth, rHeight) {
 		rWidth = rWidth || 30 * .5;
 		rHeight = rHeight || 17.3 * .5;
@@ -312,23 +313,26 @@ export default class base {
 		return points;
 	}
 	WriteHalfCircle(points, rgb, size, deg) {
+		let Angle;
+		let [x, y] = [points[0], points[1]];
+		const ctx = this.ctx;
 		rgb = rgb || 'red';
-		size = size || 60;
-		let [x, y] = [points[0] - size / 2, points[1] - size / 2];
-		if (height) {
-			y += this.bg.height * height;
+		if (deg && deg instanceof Array && deg.length == 2) {
+			Angle = deg;
+		} else {
+			deg = isNaN(deg) ? 180 : (deg % 360) - 90;
+			Angle = [
+				deg, // 圆弧起始角度
+				deg + 90 // 圆弧结束角度
+			];
 		}
-		if (deg) {
-
-		}
-		this.ctx.strokeStyle = rgb;
-		this.ctx.fillStyle = rgb;
-		this.ctx.beginPath();
-		this.ctx.roundRect(x, y, size, size, [0, size, 0, 0]);
-		this.ctx.fill();
-		if (deg) {
-			this.ctx.resetTransform();
-		}
+		ctx.strokeStyle = rgb;
+		ctx.fillStyle = rgb;
+		ctx.beginPath();
+		ctx.moveTo(x, y);
+		ctx.arc(x, y, (size || 60) / 2, Angle[0] * Math.PI / 180, Angle[1] * Math.PI / 180);
+		ctx.lineTo(x, y);
+		ctx.fill();
 		return points;
 	}
 	/**
@@ -404,5 +408,118 @@ export default class base {
 			}
 		}
 
+	}
+	
+	setFloorStart(points, rWidth, rHeight) {
+		let map = new Map;
+		const [x, y] = points;
+		rWidth = rWidth || 30;
+		rHeight = rHeight || 17.3;
+		const l = [4, 2, 1];
+		let pointsA = [
+			[x, y]
+		];
+		for (let j = 1; j < l[0]; j++) {
+			const [a, b] = pointsA[j - 1];
+			pointsA.push([a + 2 * rWidth + 4.5, b]);
+		}
+		map.set(1, pointsA);
+		for (let i = 0; i < 3; i++) {
+			let p = i * -1 - 1;
+			let pointsB = map.has(p + 1) ? map.get(p + 1) : map.get(1);
+			map.set(p, pointsB.map(v => {
+				const [a, b] = v;
+				return [a + rWidth + 2, b - 3 * rHeight - 4];
+			}).slice(0, l[i]));
+			if (i > 0) {
+				map.set(i + 1, map.get(i).map(v => {
+					const [a, b] = v;
+					return [a - rWidth - 2, b + 3 * rHeight + 4];
+				}).slice(l[i]));
+			}
+		}
+		this.floorMap =  map;
+	}
+	setFloorPoint(list){
+		let points = [];
+		//坐标系
+		for (let pos of list) {
+			if(!pos||!pos.length)continue;
+			let [x, y, j, i] = pos;
+			j = j || 0;
+			i = i || 0;
+			j = j instanceof Array ? j : [j, j + 1];
+			i = i instanceof Array ? i : [i, i + 1];
+			for (let k = i[0]; k < i[1]; k++) {
+				for (let l = j[0]; l < j[1]; l++) {
+					let offset = this.SetOffset(this.floorMap.get(x)[y], l,k);
+					points.push(offset.concat(l,k));
+				}
+			}
+		}
+		return points;
+	}
+	loopFloor(baseOpt) {
+		baseOpt  = isNaN(baseOpt)?0.5:baseOpt;
+		for (const list of this.floorTime) {
+			//时间轴
+			const [time,points] = list;
+			if (this.time >= time[0] && this.time < time[1]) {
+				let p = this.perSent(time[0], 10);
+				for(let pos of points){
+					const [x,y,l,k] = pos;
+					if (time[2] instanceof Function) {
+						time[2]([x,y], l,k,p);
+					}
+					if(p!=1){
+						if(this.time%2==0){
+							this.WriteSix([x,y], p * baseOpt);
+						}
+					}else{
+						this.WriteSix([x,y], p * baseOpt);
+					}
+					if (time[2] instanceof Function) {
+						time[3]([x,y], l,k,p);
+					}
+
+				}
+			}
+		}
+	}
+	loopIcon(icon,timePoint){
+		for(let index=0;index<timePoint.length;index++){
+			if(!timePoint[index])continue;
+			const [time,points,option,fn,text,color] = timePoint[index];
+			const endtime = timePoint[index+1]?timePoint[index+1][0][0]:9999;
+			if (this.time >= time[0] && this.time < endtime) {
+				let [j,i] = option||[];
+				let limit = time[1]||10;
+				let p = this.perSent(time[0], limit); 
+				let offset;
+				j = j || 0;
+				i = i || 0;
+				j = j instanceof Array ? j : [j, j + 1];
+				i = i instanceof Array ? i : [i, i + 1];
+				for (let k = i[0]; k < i[1]; k++) {
+					for (let l = j[0]; l < j[1]; l++) {
+						if(index>0&&points!=timePoint[index-1][1]){
+							const oldpoint = timePoint[index-1][1];
+							offset = this.MoveOffset(oldpoint,points,p,l,k);
+			
+						}else{
+							offset = this.SetOffset(points,l,k);
+						}
+						if (fn&&fn[0] instanceof Function) {
+							fn[0](offset, l,k,p);
+						}
+						this.WriteIcon(icon,offset,text||'',color);
+						if (fn&&fn[1] instanceof Function) {
+							fn[1](offset, l,k,p);
+						}
+					}
+				}
+				break;
+			}
+		}
 	}
 }

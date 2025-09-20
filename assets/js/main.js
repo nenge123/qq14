@@ -2,7 +2,19 @@ new class {
 	constructor() {
 		const N = this;
 		Object.defineProperty(self, 'N', { get: () => N });
-		self.navigator.serviceWorker && self.navigator.serviceWorker.register('sw.js');
+		self.navigator.serviceWorker && self.navigator.serviceWorker.register('sw.js',
+			{
+				scope: "/",
+				type:'module',
+				updateViaCache:'none'
+			  }
+		);
+		const {promise,resolve,reject} = Promise.withResolvers();
+		this.indexdb = promise;
+		import('/assets/js/esm/indexdb.js').then(function({MyStore,IDBStore}){
+			N.store = MyStore;
+			resolve(MyStore);
+		});
 		$(function () {
 			N.parse();
 			/*
