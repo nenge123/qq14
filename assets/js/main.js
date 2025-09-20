@@ -1,6 +1,9 @@
 new class {
 	constructor() {
 		const N = this;
+		window.addEventListener('error',function(e){
+			alert(e.message);
+		});
 		Object.defineProperty(self, 'N', { get: () => N });
 		self.navigator.serviceWorker && self.navigator.serviceWorker.register('sw.js',
 			{
@@ -9,30 +12,8 @@ new class {
 				updateViaCache:'none'
 			  }
 		);
-		const {promise,resolve,reject} = Promise.withResolvers();
-		this.indexdb = promise;
-		import('/assets/js/esm/indexdb.js').then(function({MyStore,IDBStore}){
-			N.store = MyStore;
-			resolve(MyStore);
-		});
 		$(function () {
 			N.parse();
-			/*
-			$('#layout-main').window({
-				title: '引导',
-				fit: true,
-				border: false,
-				maximized: true,
-				maximizable: false,
-				closable: false,
-				closed: false,
-				draggable: false,
-				resizable: false,
-				minimized: false,
-				minimizable: false,
-				modal: false,
-			});
-			*/
 			const page = localStorage.getItem('base-page');
 			if (page) {
 				const elm = document.querySelector('[data-page="' + page + '"]');
