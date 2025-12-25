@@ -11,21 +11,72 @@
 
 	<body>
 		<div class="p-2">
-			<h3>大型副本 巴哈姆特零式大迷宫</h3>
-			<ul class="list-group" style="font-size: 1rem;">
-				<li class="list-group-item">
-					<a href="#" data-page="bhmt/t1s.html">邂逅之章1——神杖巨蛇(保姆级流程)</a>
-				</li>
-				<li class="list-group-item">
-					<a href="#" data-page="bhmt/t5s.html">邂逅之章5——T5S双塔尼亚</a>
-				</li>
-				<li class="list-group-item">
-					<a href="#" data-page="bhmt/t6s.html">入侵之章1——T6S大王花</a>
-				</li>
-				<li class="list-group-item">
-					<a href="#" data-page="bhmt/t9s.html">入侵之章5——T9S奈尔·神·达纳斯</a>
-				</li>
-			</ul>
+			<p>房屋大区:<select id="housenum">
+				<option value="1" selected>1区</option>
+				<option value="2">2区</option>
+				<option value="3">3区</option>
+				<option value="4">4区</option>
+				<option value="5">5区</option>
+				<option value="6">6区</option>
+			</select>
+			<button type="button" class="btn btn-primary" id="houserefresh">刷新</button>
+			</p>
+			<div class="accordion" id="accordionPanelsStayOpenExample">
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed bg-danger text-white" type="button" data-bs-toggle="collapse" data-bs-target="#house-1" aria-expanded="true" aria-controls="house-1">海都-标准区-金币</button>
+					</h2>
+					<div id="house-1" class="accordion-collapse collapse">
+						<div class="accordion-body">
+						</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed bg-danger text-white" type="button" data-bs-toggle="collapse" data-bs-target="#house-2" aria-expanded="false" aria-controls="house-2"> 海都-镜像区-水晶购买 </button>
+					</h2>
+					<div id="house-2" class="accordion-collapse collapse">
+						<div class="accordion-body">
+						</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#house-3" aria-expanded="false" aria-controls="house-3">沙都-标准区-金币</button>
+					</h2>
+					<div id="house-3" class="accordion-collapse collapse">
+						<div class="accordion-body">
+						</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#house-4" aria-expanded="false" aria-controls="house-4">沙都-镜像区-金币</button>
+					</h2>
+					<div id="house-4" class="accordion-collapse collapse">
+						<div class="accordion-body">
+						</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed bg-success text-white" type="button" data-bs-toggle="collapse" data-bs-target="#house-5" aria-expanded="false" aria-controls="house-5">森都-标准区-金币</button>
+					</h2>
+					<div id="house-5" class="accordion-collapse collapse">
+						<div class="accordion-body">
+						</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed bg-success text-white" type="button" data-bs-toggle="collapse" data-bs-target="#house-6" aria-expanded="false" aria-controls="house-6">森都-镜像区-金币</button>
+					</h2>
+					<div id="house-4" class="accordion-collapse collapse">
+						<div class="accordion-body">
+						</div>
+					</div>
+				</div>
+			</div>
 			<hr>
 			<h3>推荐网站</h3>
 			<ul class="easyui-tree m-2">

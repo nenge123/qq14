@@ -1,4 +1,46 @@
+import { AnimationFrame } from "../../assets/js/esm/AnimationFrame.js";
 export default class base {
+	time = 0;
+	maxTime = 0;
+	constructor(elm, dom) {
+		const canvas = document.createElement('canvas');
+		elm.appendChild(canvas);
+		this.dom = dom;
+		this.canvas = canvas;
+		this.canvas.width = 180;
+		this.canvas.height = 60;
+		this.ctx = this.canvas.getContext('2d');
+		this.WriteBigText([0, 30], '图片加载中...', 'red');
+	}
+	setLoopFrame(MyName, maxTime) {
+		const T = this;
+		this.MyName = MyName;
+		this.MyLoop = {
+			maxTime,
+			canvas: T.canvas,
+			progress(speedTime,nowTime) {
+				if (!this.canvas.isfocus) return;
+				T.time += new Number(speedTime).toSeconds(3);
+				T.indexTime +=1;
+				if(T.maxTime&&T.maxTime<T.time){
+					T.time = 0;
+					T.indexTime = 0;
+				}
+				T.loopFrame(this);
+			}
+		};
+		AnimationFrame.setLoop(T.MyName, T.MyLoop);
+		['mouseover', 'focusin', 'touchstart'].forEach(
+			v => this.canvas.addEventListener(v, () => {
+				this.canvas.isfocus = false;
+			}));
+		['mouseout', 'focusout', 'touchend', 'touchout'].forEach(
+			v => this.canvas.addEventListener(v, () => {
+				this.canvas.isfocus = true;
+			}));
+		this.dom.addEventListener('hide.bs.modal', e => AnimationFrame.removeLoop(MyName));
+		this.dom.addEventListener('show.bs.modal', e => AnimationFrame.setLoop(T.MyName, T.MyLoop));
+	}
 	/**
 	 * 启动循环
 	 */
@@ -24,7 +66,24 @@ export default class base {
 	 * @returns 
 	 */
 	async fetchImage(url, option) {
-		return createImageBitmap(await (await fetch(url)).blob(), option);
+		const blob = /\.svg$/.test(url) ? await this.fetchSvg(url) : await (await fetch(url)).blob();
+		return createImageBitmap(blob, option);
+	}
+	async fetchSvg(url) {
+		return new Promise(res => {
+			const imageElement = document.createElement('img');
+			imageElement.src = url;
+			imageElement.onload = e => {
+				res(imageElement);
+			}
+		});
+	}
+	async fetchImageList(obj) {
+		return Promise.all(Object.entries(obj).map(async value => {
+			const [name, data] = value;
+			this[name] = await this.fetchImage(data[0], data[1]);
+			return true;
+		}));
 	}
 	/**
 	 * 清楚画布
@@ -40,8 +99,8 @@ export default class base {
 	 */
 	perSent(start, limit) {
 		let p = (this.time - start) / limit;
-		if (p > 1) p = 1;
-		if (p < 0) p = 0;
+		if (p >= 1) p = 1;
+		if (p <= 0) p = 0;
 		return p;
 	}
 	/**
@@ -192,9 +251,7 @@ export default class base {
 	WriteShareDGM(xy, opt, r) {
 		const [x, y] = xy;
 		const ctx = this.ctx;
-		opt = isNaN(opt) ? 1 : opt;
 		r = r || 18;
-		ctx.fillStyle = "rgba(255,193,7," + opt + ")";
 		const pi = Math.PI / 180;
 		for (let i = 0; i < 9; i++) {
 			//Math.PI
@@ -226,13 +283,14 @@ export default class base {
 				(pointsD[0] + pointsC[0]) / 2,
 				(pointsD[1] + pointsC[1]) / 2
 			];
+			ctx.fillStyle =isNaN(opt)?opt:"rgba(255,193,7," + (opt||0.5) + ")";
 			ctx.beginPath();
 			ctx.moveTo(...pointsA);
 			ctx.lineTo(...pointsD);
 			ctx.lineTo(...pointsB);
 			ctx.lineTo(...pointsG);
 			ctx.lineTo(...pointsA);
-			ctx.closePath();
+			//ctx.closePath();
 			ctx.fill();
 		}
 		if (r > 10) {
@@ -343,16 +401,27 @@ export default class base {
 	 * @param {*} color 
 	 * @returns 
 	 */
-	WriteIcon(icon, points, text, color) {
+	WriteIcon(icon, points, text, color,color2,FontSize) {
+		const ctx = this.ctx;
 		icon = icon instanceof ImageBitmap ? icon : this[icon];
-		let [x, y] = points;
-		this.ctx.drawImage(icon, x - icon.width / 2, y - icon.height / 2);
+		if(!icon) return;
+		const [x, y] = [points[0] - icon.width / 2,points[1] - icon.height / 2];
+		FontSize = FontSize||14;
 		if (text) {
-			this.ctx.font = 'normal 14px serif';
-			this.ctx.fillStyle = color || "yellow";
-			this.ctx.fillText(text, x + icon.width / 2, y + 5);
+			ctx.font = 'normal '+FontSize+'px serif';
+			const info = ctx.measureText(text);
+			const left = x + icon.width;
+			const top = y +icon.height / 2;
+			if(color2){
+				const height = FontSize*2>icon.height?FontSize*2:icon.height;
+				ctx.fillStyle = color2 || "black";
+				ctx.fillRect(left,top-height/2,info.width,height);
+			}
+			ctx.fillStyle = color || "yellow";
+			ctx.fillText(text,left,top);
 		}
-		return [x, y];
+		ctx.drawImage(icon,x,y);
+		return points;
 	}
 	/**
 	 * 移动图标
@@ -409,7 +478,7 @@ export default class base {
 		}
 
 	}
-	
+
 	setFloorStart(points, rWidth, rHeight) {
 		let map = new Map;
 		const [x, y] = points;
@@ -438,13 +507,13 @@ export default class base {
 				}).slice(l[i]));
 			}
 		}
-		this.floorMap =  map;
+		this.floorMap = map;
 	}
-	setFloorPoint(list){
+	setFloorPoint(list) {
 		let points = [];
 		//坐标系
 		for (let pos of list) {
-			if(!pos||!pos.length)continue;
+			if (!pos || !pos.length) continue;
 			let [x, y, j, i] = pos;
 			j = j || 0;
 			i = i || 0;
@@ -452,49 +521,52 @@ export default class base {
 			i = i instanceof Array ? i : [i, i + 1];
 			for (let k = i[0]; k < i[1]; k++) {
 				for (let l = j[0]; l < j[1]; l++) {
-					let offset = this.SetOffset(this.floorMap.get(x)[y], l,k);
-					points.push(offset.concat(l,k));
+					let offset = this.SetOffset(this.floorMap.get(x)[y], l, k);
+					points.push(offset.concat(l, k));
 				}
 			}
 		}
 		return points;
 	}
+	loopFrame(value) {
+
+	}
 	loopFloor(baseOpt) {
-		baseOpt  = isNaN(baseOpt)?0.5:baseOpt;
+		baseOpt = isNaN(baseOpt) ? 0.5 : baseOpt;
 		for (const list of this.floorTime) {
 			//时间轴
-			const [time,points] = list;
+			const [time, points] = list;
 			if (this.time >= time[0] && this.time < time[1]) {
 				let p = this.perSent(time[0], 10);
-				for(let pos of points){
-					const [x,y,l,k] = pos;
+				for (let pos of points) {
+					const [x, y, l, k] = pos;
 					if (time[2] instanceof Function) {
-						time[2]([x,y], l,k,p);
+						time[2]([x, y], l, k, p);
 					}
-					if(p!=1){
-						if(this.time%2==0){
-							this.WriteSix([x,y], p * baseOpt);
+					if (p != 1) {
+						if (this.time % 2 == 0) {
+							this.WriteSix([x, y], p * baseOpt);
 						}
-					}else{
-						this.WriteSix([x,y], p * baseOpt);
+					} else {
+						this.WriteSix([x, y], p * baseOpt);
 					}
 					if (time[2] instanceof Function) {
-						time[3]([x,y], l,k,p);
+						time[3]([x, y], l, k, p);
 					}
 
 				}
 			}
 		}
 	}
-	loopIcon(icon,timePoint){
-		for(let index=0;index<timePoint.length;index++){
-			if(!timePoint[index])continue;
-			const [time,points,option,fn,text,color] = timePoint[index];
-			const endtime = timePoint[index+1]?timePoint[index+1][0][0]:9999;
+	loopIcon(icon, timePoint) {
+		for (let index = 0; index < timePoint.length; index++) {
+			if (!timePoint[index]) continue;
+			const [time, points, option, fn, text, color] = timePoint[index];
+			const endtime = timePoint[index + 1] ? timePoint[index + 1][0][0] : 9999;
 			if (this.time >= time[0] && this.time < endtime) {
-				let [j,i] = option||[];
-				let limit = time[1]||10;
-				let p = this.perSent(time[0], limit); 
+				let [j, i] = option || [];
+				let limit = time[1] || 10;
+				let p = this.perSent(time[0], limit); p
 				let offset;
 				j = j || 0;
 				i = i || 0;
@@ -502,23 +574,36 @@ export default class base {
 				i = i instanceof Array ? i : [i, i + 1];
 				for (let k = i[0]; k < i[1]; k++) {
 					for (let l = j[0]; l < j[1]; l++) {
-						if(index>0&&points!=timePoint[index-1][1]){
-							const oldpoint = timePoint[index-1][1];
-							offset = this.MoveOffset(oldpoint,points,p,l,k);
-			
-						}else{
-							offset = this.SetOffset(points,l,k);
+						if (index > 0 && points != timePoint[index - 1][1]) {
+							const oldpoint = timePoint[index - 1][1];
+							offset = this.MoveOffset(oldpoint, points, p, l, k);
+
+						} else {
+							offset = this.SetOffset(points, l, k);
 						}
-						if (fn&&fn[0] instanceof Function) {
-							fn[0](offset, l,k,p);
+						if (fn && fn[0] instanceof Function) {
+							fn[0](offset, l, k, p);
 						}
-						this.WriteIcon(icon,offset,text||'',color);
-						if (fn&&fn[1] instanceof Function) {
-							fn[1](offset, l,k,p);
+						this.WriteIcon(icon, offset, text || '', color);
+						if (fn && fn[1] instanceof Function) {
+							fn[1](offset, l, k, p);
 						}
 					}
 				}
 				break;
+			}
+		}
+	}
+	timeFunction(timePoint) {
+		for (let index = 0; index < timePoint.length; index++) {
+			if (!timePoint[index]) continue;
+			const [time, startFn] = timePoint[index];
+			const endtime = timePoint[index + 1] ? timePoint[index + 1][0][0] : 9999;
+			if (this.time*1000 >= time[0]*1000 && this.time*1000 < endtime*1000) {
+				let progress = !time[1] ? 0 : this.perSent(time[0], time[1]);
+				if (startFn instanceof Function) {
+					startFn(progress);
+				}
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 export default class t1s{
-	constructor(elm){
+	constructor(elm,dom) {
 		const canvas = document.createElement('canvas');
 		elm.appendChild(canvas);
 		this.canvas = canvas;

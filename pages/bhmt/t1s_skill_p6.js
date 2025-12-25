@@ -1,7 +1,7 @@
 import base from "./t1s_skill_base.js";
 export default class t1s extends base {
-	constructor(elm) {
-		super();
+	constructor(elm,dom) {
+		super(elm,dom);
 		const canvas = document.createElement('canvas');
 		elm.appendChild(canvas);
 		this.canvas = canvas;

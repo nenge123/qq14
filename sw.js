@@ -1,3 +1,4 @@
+import {MyStore} from '/assets/js/esm/indexdb.js';
 self.addEventListener('install',
 	function (event) {
 		console.log(event.type);

@@ -1,4 +1,4 @@
-export class IDBStore{
+class IDBStore{
 	dataName = 'qq14';
 	tableList = ['soft','data','files','other'];
 	constructor(name){
@@ -166,7 +166,7 @@ export class IDBStore{
 		return files;
 	}
 }
-export const MyStore = new IDBStore;
+const MyStore = new IDBStore;
 Object.defineProperties(self,{
 	IDBStore:{
 		get:()=>IDBStore,
@@ -174,5 +174,5 @@ Object.defineProperties(self,{
 	MyStore:{
 		get:()=>MyStore,
 	}
-
 });
+export {IDBStore,MyStore};

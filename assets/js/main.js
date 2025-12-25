@@ -1,10 +1,10 @@
 new class {
 	constructor() {
 		const N = this;
+		Object.defineProperty(self, 'N', { get: () => N });
 		window.addEventListener('error',function(e){
 			alert(e.message);
 		});
-		Object.defineProperty(self, 'N', { get: () => N });
 		self.navigator.serviceWorker && self.navigator.serviceWorker.register('sw.js',
 			{
 				scope: "/",
@@ -23,6 +23,7 @@ new class {
 					N.getWin(page);
 				}
 			}
+			import('./esm/house.js');
 		});
 
 	}
@@ -125,7 +126,7 @@ new class {
 	}
 	showModal(newelm,elm){
 		document.body.appendChild(newelm);
-		localStorage.setItem('base-page', elm.getAttribute('data-page'));
+		elm&&localStorage.setItem('base-page', elm.getAttribute('data-page'));
 		jQuery(newelm).modal('show').on('hide.bs.modal', function () {
 			const page = localStorage.getItem('base-page');
 			if(page&&page==$(newelm).attr('page-href')){
@@ -133,7 +134,7 @@ new class {
 			}
 			$(newelm).trigger('window.close');
 		});
-		elm.addEventListener('click', function () {
+		elm&&elm.addEventListener('click', function () {
 			jQuery(newelm).modal('show');
 		});
 		this.parse(newelm);
