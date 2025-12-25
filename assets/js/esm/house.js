@@ -43,6 +43,7 @@ house.forEach((e,index)=>{
 		td2.setAttribute('id','housename-'+id+'-'+i);
 		const input = document.createElement('input');
 		input.type = 'text';
+		input.style.cssText='max-width:320px';
 		input.setAttribute('id','input-'+id+'-'+i);
 		input.placeholder= '你的游戏ID,备注等信息,控制在100字内!';
 		input.setAttribute('class','form-control');
@@ -100,6 +101,8 @@ async function getpost(){
 	return topost(post);
 }
 async function topost(post) {
+	//1帝国
+	post.set('server',1);
 	const res = await fetch('https://8.134.255.198/qq14.php',{
 		method:'POST',body:post
 	});

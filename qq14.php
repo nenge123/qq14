@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:GET,POST,OPTIONS');
 header('Access-Control-Allow-Headers:Content-Type, Authorization');
 header('content-type:text/json');
+$server = isset($_POST['server']) ? intval($_POST['server']):1;
 $partition = isset($_POST['path']) ? intval($_POST['path']):NULL;
 if($partition){
 	$conf = include('./config.inc.php');
@@ -19,11 +20,11 @@ if($partition){
 		$text = trim(mb_substr($text,0,250));
 		if(!empty($text)){
 			$PDOStatement = $pdo->prepare('INSERT INTO `qq14_house` (`server`,`path`,`pos`,`no`,`text`,`time`) VALUES(?,?,?,?,?,?);');
-			$PDOStatement->execute([1,intval($partition),intval($_POST['pos']),intval($_POST['no']),$text,time()]);
+			$PDOStatement->execute([$server,intval($partition),intval($_POST['pos']),intval($_POST['no']),$text,time()]);
 		}
 	}
 	$PDOStatement = $pdo->prepare('SELECT * FROM `qq14_house` WHERE `server`= ? AND `path` = ?;');
-	if($PDOStatement->execute([1,intval($partition)])){
+	if($PDOStatement->execute([$server,intval($partition)])){
 		$result = $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
 		if(!empty($result)){
 			echo json_encode($result);
