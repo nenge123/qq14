@@ -5,10 +5,12 @@ const housenum_data = localStorage.getItem('housenum');
 if(housenum_data!=undefined){
 	housenum.value = housenum_data;
 }
-housenum.addEventListener('change',function(){
+housenum.addEventListener('change',async function(){
 	localStorage.setItem('housenum',this.value);
-	getpost();
+	await getpost();
+	alert('切换成功');
 });
+
 
 const house = document.querySelectorAll('[id^=house-]');
 
@@ -49,7 +51,7 @@ house.forEach((e,index)=>{
 		btn.setAttribute('data-pos',id);
 		btn.setAttribute('data-no',i);
 		btn.type= 'button';
-		btn.addEventListener('click',posttext);
+		btn.addEventListener('pointerdown',posttext);
 		btn.innerHTML = '申请';
 		td2.appendChild(input);
 		td2.appendChild(btn);
@@ -74,7 +76,7 @@ house.forEach((e,index)=>{
 	img.src = '/images/house/'+id+'.webp';
 	elm.appendChild(img);
 });
-function posttext(event){
+async function posttext(event){
 	/**
 	 * @type HTMLElement
 	 */
@@ -87,7 +89,9 @@ function posttext(event){
 	post.set('pos',data.pos);
 	post.set('no',data.no);
 	post.set('text',input.value);
-	return topost(post);
+	await topost(post);
+	input.value = '';
+	alert('提交成功');
 
 }
 async function getpost(){
@@ -113,4 +117,8 @@ async function topost(post) {
 		})
 	}
 }
+houserefresh.addEventListener('pointerdown',async e=>{
+await getpost();
+alert('更新成功');
+});
 getpost();
