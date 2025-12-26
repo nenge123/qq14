@@ -78,7 +78,8 @@ function createHouse(index,elm){
 	Object.entries(housePos).forEach(entry=>{
 		const details = document.createElement('details');
 		const summary = document.createElement('summary');
-		summary.innerHTML = entry[0]+'房型:'+entry[1].map(v=>[2, 4, 6].includes(index)?v+30:v).join('&nbsp;&nbsp;');
+		summary.innerHTML = entry[0]+'房型:<br>'+entry[1].map(v=>[2, 4, 6].includes(index)?v+30:v).join('&nbsp;&nbsp;');
+		summary.style.cssText = 'white-space: pre-wrap;word-wrap: break-word;';
 		createTable(entry[1],details,index);
 		details.appendChild(summary);
 		elm.appendChild(details);
